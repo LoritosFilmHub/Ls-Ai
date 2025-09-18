@@ -3,77 +3,38 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Pagamento - Ls Ai Studio</title>
-  <style>
-    body {
-      background: #f5f5f5;
-      font-family: Arial, sans-serif;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-    }
-    .pix-box {
-      max-width: 400px;
-      margin: 40px auto;
-      padding: 20px;
-      background: #6a0dad;
-      color: white;
-      border-radius: 15px;
-      text-align: center;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-    }
-    .pix-box img {
-      width: 220px;
-      margin: 15px auto;
-      display: block;
-      border-radius: 10px;
-    }
-    textarea {
-      width: 100%;
-      height: 80px;
-      font-size: 12px;
-      padding: 10px;
-      border-radius: 8px;
-      border: none;
-      resize: none;
-    }
-    button {
-      margin-top: 10px;
-      padding: 10px 15px;
-      border: none;
-      border-radius: 8px;
-      background: #fff;
-      color: #6a0dad;
-      font-weight: bold;
-      cursor: pointer;
-    }
-  </style>
+  <title>Pagamento Pix - LS Ai Studio</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="pix-box">
-    <h2>💎 Plano Avançado - Ls Ai Studio</h2>
-    <p>R$ 15,00 / mês</p>
-    <p>400 créditos diários (renovação em 24h)</p>
-    <p style="font-size:14px;">Contato: 77negocios.online.2050@gmail.com</p>
+  <div class="pix-container">
+    <h2>Pagamento via Pix</h2>
+    <p>Escolha um valor para gerar o QR Code:</p>
 
-    <img src="assets/pix_qrcode_ls_ai_studio.png" alt="QR Code Pix">
+    <!-- Botões de valores -->
+    <div class="valores">
+      <button class="valor-btn" onclick="gerarPix(10)">R$ 10</button>
+      <button class="valor-btn" onclick="gerarPix(20)">R$ 20</button>
+      <button class="valor-btn" onclick="gerarPix(30)">R$ 30</button>
+    </div>
 
-    <p style="font-size:14px;">Escaneie o QR Code acima<br>ou copie o código Pix abaixo:</p>
+    <!-- QR Code -->
+    <img id="qrcode" src="assets/qrcode-pix.png" alt="QR Code Pix">
 
-    <textarea id="pixCode">00020126580014BR.GOV.BCB.PIX01361c814ae7-453e-470d-a9b4-9b26f1589d1a5204000053039865400515.005802BR5912LsAiStudio6006BRASIL62070503***6304</textarea>
+    <!-- Chave Pix -->
+    <div class="pix-texto">
+      <strong>Chave Pix:</strong><br>
+      <span id="pix-chave">1c814ae7-453e-470d-a9b4-9b26f1589d1a</span><br><br>
+      <strong>E-mail:</strong><br>
+      <span>loritos.videoshort.ai@gmail.com</span>
+    </div>
 
-    <button onclick="copyPix()">📋 Copiar Código Pix</button>
+    <!-- Botão copiar -->
+    <button class="valor-btn" onclick="copiarPix()">📋 Copiar Chave Pix</button>
+
+    <p class="rodape">LS Ai Studio © 2025</p>
   </div>
 
-  <script>
-  function copyPix() {
-    var copyText = document.getElementById("pixCode");
-    copyText.select();
-    copyText.setSelectionRange(0, 99999); 
-    document.execCommand("copy");
-    alert("✅ Código Pix copiado!");
-  }
-  </script>
+  <script src="script.js"></script>
 </body>
 </html>
