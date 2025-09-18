@@ -1,65 +1,64 @@
 body {
   font-family: Arial, sans-serif;
-  background: linear-gradient(135deg, #6a11cb, #2575fc);
-  color: #fff;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
+  background: linear-gradient(135deg, #5b00b5, #8e2de2);
+  color: white;
+  text-align: center;
+  padding: 40px;
 }
 
-.container {
-  background: rgba(0, 0, 0, 0.6);
+.pix-container {
+  max-width: 450px;
+  margin: auto;
+  background: rgba(255, 255, 255, 0.1);
   padding: 25px;
   border-radius: 15px;
-  text-align: center;
-  max-width: 400px;
-  width: 90%;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+  box-shadow: 0 0 20px rgba(0,0,0,0.4);
 }
 
-h1 {
-  font-size: 1.6rem;
-  margin-bottom: 10px;
-}
-
-.descricao {
-  font-size: 1rem;
-  margin-bottom: 20px;
-}
-
-.qrcode-box img {
-  width: 200px;
-  height: 200px;
-  border: 5px solid white;
+.pix-container img {
+  width: 250px;
   border-radius: 10px;
-  margin-bottom: 15px;
+  margin: 20px auto;
+  background: white;
+  padding: 10px;
+  display: block;
 }
 
 .pix-texto {
+  background: rgba(255, 255, 255, 0.2);
+  padding: 15px;
+  border-radius: 10px;
   margin: 15px 0;
-  font-size: 0.9rem;
-  word-wrap: break-word;
+  font-size: 16px;
+  word-break: break-word;
 }
 
-button {
-  background: #ff9800;
-  color: #fff;
-  border: none;
+.valores {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin: 20px 0;
+}
+
+.valor-btn {
+  background: #ffcc00;
+  color: #333;
+  font-size: 16px;
+  font-weight: bold;
   padding: 12px 18px;
-  border-radius: 8px;
-  font-size: 1rem;
+  border: none;
+  border-radius: 10px;
   cursor: pointer;
   transition: 0.3s;
 }
 
-button:hover {
-  background: #e68900;
+.valor-btn:hover {
+  background: #ffaa00;
 }
 
-.contato {
+.rodape {
   margin-top: 20px;
-  font-size: 0.9rem;
+  font-size: 14px;
+  opacity: 0.8;
 }
