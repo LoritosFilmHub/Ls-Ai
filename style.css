@@ -1,0 +1,65 @@
+body {
+  font-family: Arial, sans-serif;
+  background: linear-gradient(135deg, #6a11cb, #2575fc);
+  color: #fff;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.container {
+  background: rgba(0, 0, 0, 0.6);
+  padding: 25px;
+  border-radius: 15px;
+  text-align: center;
+  max-width: 400px;
+  width: 90%;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+}
+
+h1 {
+  font-size: 1.6rem;
+  margin-bottom: 10px;
+}
+
+.descricao {
+  font-size: 1rem;
+  margin-bottom: 20px;
+}
+
+.qrcode-box img {
+  width: 200px;
+  height: 200px;
+  border: 5px solid white;
+  border-radius: 10px;
+  margin-bottom: 15px;
+}
+
+.pix-texto {
+  margin: 15px 0;
+  font-size: 0.9rem;
+  word-wrap: break-word;
+}
+
+button {
+  background: #ff9800;
+  color: #fff;
+  border: none;
+  padding: 12px 18px;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+button:hover {
+  background: #e68900;
+}
+
+.contato {
+  margin-top: 20px;
+  font-size: 0.9rem;
+}
