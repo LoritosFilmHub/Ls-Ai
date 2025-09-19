@@ -54,27 +54,25 @@
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
 
   <script>
-// Import the functions you need from the SDKs you need
-import { initializeApp } from "firebase/app";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
+<script type="module">
+  // Import the functions you need from the SDKs you need
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-app.js";
+  // TODO: Add SDKs for Firebase products that you want to use
+  // https://firebase.google.com/docs/web/setup#available-libraries
 
-// Your web app's Firebase configuration
-const firebaseConfig = {
-  apiKey: "AIzaSyDKPoHfjTHnfwrZmqewtM6lTsDAA9tGIO4",
-  authDomain: "ls-ai-studio-ee7b5.firebaseapp.com",
-  projectId: "ls-ai-studio-ee7b5",
-  storageBucket: "ls-ai-studio-ee7b5.firebasestorage.app",
-  messagingSenderId: "900119249794",
-  appId: "1:900119249794:web:b45ce25dce982e2bacc59b"
-};
+  // Your web app's Firebase configuration
+  const firebaseConfig = {
+    apiKey: "AIzaSyDKPoHfjTHnfwrZmqewtM6lTsDAA9tGIO4",
+    authDomain: "ls-ai-studio-ee7b5.firebaseapp.com",
+    projectId: "ls-ai-studio-ee7b5",
+    storageBucket: "ls-ai-studio-ee7b5.firebasestorage.app",
+    messagingSenderId: "900119249794",
+    appId: "1:900119249794:web:b45ce25dce982e2bacc59b"
+  };
 
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-
-    // Inicializa Firebase
-    firebase.initializeApp(firebaseConfig);
-    const auth = firebase.auth();
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+</script>
 
     let isLogin = true;
 
