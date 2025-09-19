@@ -3,28 +3,48 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>LS Ai Studio - Firebase Test</title>
+  <title>LS Ai Studio - Login Completo</title>
   <style>
     body { font-family: Arial, sans-serif; background: #0f0f23; color: white; text-align: center; padding: 20px; }
-    #debug { background: #000; color: lime; padding: 15px; border-radius: 8px; margin-top: 20px; font-family: monospace; text-align: left; max-height: 300px; overflow-y: auto; }
-    button { background: #7b2ff7; color: white; padding: 14px 24px; border: none; border-radius: 12px; cursor: pointer; margin: 20px 0; font-size: 18px; font-weight: bold; }
+    .container { max-width: 400px; margin: 50px auto; background: rgba(255,255,255,0.05); padding: 30px; border-radius: 15px; }
+    input { width: 100%; padding: 12px; margin: 10px 0; border-radius: 8px; border: none; background: rgba(255,255,255,0.1); color: white; }
+    button { background: #7b2ff7; color: white; padding: 14px 24px; border: none; border-radius: 12px; cursor: pointer; margin: 10px 0; width: 100%; font-weight: bold; }
     button:hover { background: #5b00b5; }
-    h2 { color: #ff3366; }
+    #status { background: #000; color: lime; padding: 15px; border-radius: 8px; margin-top: 20px; font-family: monospace; }
+    .links { margin-top: 20px; }
+    .links a { color: #ff3366; text-decoration: none; margin: 0 10px; }
   </style>
 </head>
 <body>
 
-  <h2>🚀 Teste Firebase Auth — GitHub Pages</h2>
-  <p>Clique no botão abaixo para criar um usuário de teste.</p>
-  <button onclick="testarFirebase()">💥 TESTAR FIREBASE AGORA</button>
-  <div id="debug">🟢 Sistema pronto. Clique no botão acima para iniciar.</div>
+  <div class="container">
+    <h2>🔐 LS Ai Studio</h2>
+    <div id="form-login">
+      <input type="email" id="email" placeholder="Seu email" required>
+      <input type="password" id="senha" placeholder="Sua senha" required>
+      <button onclick="login()">Entrar</button>
+      <button onclick="registrar()">Criar Conta</button>
+    </div>
+
+    <div id="form-dashboard" style="display:none;">
+      <h3>🎉 Bem-vindo!</h3>
+      <p id="user-email">carregando...</p>
+      <button onclick="logout()">Sair</button>
+      <div class="links">
+        <a href="#pix">💳 Meu Pix</a>
+        <a href="#perfil">👤 Meu Perfil</a>
+      </div>
+    </div>
+
+    <div id="status">Pronto para usar.</div>
+  </div>
 
   <script type="module">
-    // ✅ IMPORTANDO SDKs DO FIREBASE VIA CDN — SEM NPM, SEM INSTALAÇÃO!
+    // ✅ IMPORTS
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-    import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+    import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
-    // ✅ SUA CONFIG DO FIREBASE
+    // ✅ CONFIG
     const firebaseConfig = {
       apiKey: "AIzaSyCLWvDtXZuGwhME9FxvXFcs9Ir2YkNVRBg",
       authDomain: "ls-ai-studio-64ecf.firebaseapp.com",
@@ -35,43 +55,54 @@
       measurementId: "G-VSLCSZ0Y5Q"
     };
 
-    // ✅ INICIALIZA FIREBASE
+    // ✅ INICIALIZAÇÃO
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
 
-    // ✅ FUNÇÃO DE TESTE
-    async function testarFirebase() {
-      const debug = document.getElementById("debug");
-      debug.innerHTML = "🔧 Iniciando teste...<br>";
+    // ✅ MONITORA SE O USUÁRIO ESTÁ LOGADO
+    onAuthStateChanged(auth, (user) => {
+      const status = document.getElementById("status");
+      if (user) {
+        document.getElementById("form-login").style.display = "none";
+        document.getElementById("form-dashboard").style.display = "block";
+        document.getElementById("user-email").innerText = `Email: ${user.email}`;
+        status.innerHTML = "✅ Logado com sucesso!";
+      } else {
+        document.getElementById("form-login").style.display = "block";
+        document.getElementById("form-dashboard").style.display = "none";
+        status.innerHTML = "🔴 Nenhum usuário logado.";
+      }
+    });
 
+    // ✅ FUNÇÕES
+    async function registrar() {
+      const email = document.getElementById("email").value;
+      const senha = document.getElementById("senha").value;
+      const status = document.getElementById("status");
       try {
-        const timestamp = Date.now();
-        const email = `teste+${timestamp}@lsstudio.temp`;
-        const senha = `SenhaFort3!${timestamp}`;
-
-        debug.innerHTML += `📧 Email: ${email}<br>`;
-        debug.innerHTML += `🔒 Criando usuário...<br>`;
-
-        const userCredential = await createUserWithEmailAndPassword(auth, email, senha);
-
-        debug.innerHTML += `✅ <strong>SUCESSO!</strong><br>`;
-        debug.innerHTML += `🆔 UID: ${userCredential.user.uid}<br>`;
-        debug.innerHTML += `✉️ Email: ${userCredential.user.email}<br>`;
-        debug.innerHTML += `🎉 <strong>FUNCIONANDO NO GITHUB PAGES!</strong><br>`;
-
-        console.log("✅ Usuário criado:", userCredential.user);
-
+        await createUserWithEmailAndPassword(auth, email, senha);
+        status.innerHTML = "✅ Conta criada! Você será logado automaticamente.";
       } catch (error) {
-        debug.innerHTML += `❌ <strong>ERRO:</strong><br>`;
-        debug.innerHTML += `📛 Código: ${error.code}<br>`;
-        debug.innerHTML += `💬 Mensagem: ${error.message}<br>`;
-        console.error("Erro:", error);
+        status.innerHTML = `❌ Erro: ${error.message}`;
       }
     }
 
-    // ✅ EXPÕE A FUNÇÃO PARA O BOTÃO
-    window.testarFirebase = testarFirebase;
+    async function login() {
+      const email = document.getElementById("email").value;
+      const senha = document.getElementById("senha").value;
+      const status = document.getElementById("status");
+      try {
+        await signInWithEmailAndPassword(auth, email, senha);
+        status.innerHTML = "✅ Login realizado!";
+      } catch (error) {
+        status.innerHTML = `❌ Erro: ${error.message}`;
+      }
+    }
 
+    async function logout() {
+      await signOut(auth);
+      document.getElementById("status").innerHTML = "👋 Você saiu.";
+    }
   </script>
 
 </body>
