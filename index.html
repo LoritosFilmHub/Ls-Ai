@@ -208,83 +208,55 @@
 
     // ✅ FUNÇÕES PRINCIPAIS
 
-    async function registrar() {
-      const email = document.getElementById("email").value;
-      const senha = document.getElementById("senha").value;
-      try {
-        await createUserWithEmailAndPassword(auth, email, senha);
-        document.getElementById("status").innerHTML = "✅ Conta criada! Bem-vindo!";
-      } catch (error) {
-        document.getElementById("status").innerHTML = `❌ Erro: ${error.message}`;
-      }
-    }
+  async function registrar() {
+  const email = document.getElementById("email").value;
+  const senha = document.getElementById("senha").value;
+  const status = document.getElementById("status");
 
-    async function login() {
-      const email = document.getElementById("email").value;
-      const senha = document.getElementById("senha").value;
-      try {
-        await signInWithEmailAndPassword(auth, email, senha);
-        document.getElementById("status").innerHTML = "✅ Login realizado com sucesso!";
-      } catch (error) {
-        document.getElementById("status").innerHTML = `❌ Erro: ${error.message}`;
-      }
-    }
+  if (!email || !senha) {
+    status.innerHTML = "❌ Preencha email e senha!";
+    return;
+  }
 
-    async function loginGoogle() {
-      const provider = new GoogleAuthProvider();
-      try {
-        await signInWithPopup(auth, provider);
-        document.getElementById("status").innerHTML = "✅ Logado com Google!";
-      } catch (error) {
-        document.getElementById("status").innerHTML = `❌ Erro Google: ${error.message}`;
-      }
-    }
+  status.innerHTML = "⏳ Criando sua conta...";
 
-    // ✅🔥 FUNÇÃO DE LOGOUT CORRIGIDA — AGORA FUNCIONA 100%
-    async function logout() {
-      try {
-        await signOut(auth);
-        
-        // 👇👇👇 FORÇA A TROCA DE TELA — ISSO É O QUE ESTAVA FALTANDO!
-        document.getElementById("form-login").style.display = "block";
-        document.getElementById("form-dashboard").style.display = "none";
-        
-        // Limpa campos e status
-        document.getElementById("email").value = "";
-        document.getElementById("senha").value = "";
-        document.getElementById("status").innerHTML = "👋 Você saiu com sucesso.";
-        
-        // Limpa chaves Pix geradas
-        document.getElementById("pix-key").style.display = "none";
-        document.getElementById("pix-key-2").style.display = "none";
-        
-      } catch (error) {
-        document.getElementById("status").innerHTML = `❌ Erro ao sair: ${error.message}`;
-      }
-    }
+  try {
+    // 👇 Cria o usuário no Firebase
+    const userCredential = await createUserWithEmailAndPassword(auth, email, senha);
 
-    function gerarChavePix() {
-      const pixKey = `CPF+${Math.floor(10000000000 + Math.random() * 90000000000)}`;
-      let pixDiv = document.getElementById("pix-key");
-      if (!pixDiv || pixDiv.style.display === 'none') {
-        pixDiv = document.getElementById("pix-key-2");
-      }
-      pixDiv.style.display = "block";
-      pixDiv.innerHTML = `<strong>PIX GERADO:</strong> ${pixKey}<br><small>Copie e use no seu app bancário.</small>`;
-    }
-
-    function mostrarSecao(secao) {
-      document.getElementById('pix').style.display = 'none';
-      document.getElementById('perfil').style.display = 'none';
-      document.getElementById('dashboard-content').style.display = 'none';
+    // 👇 Confirma que o usuário foi criado
+    if (userCredential.user) {
+      status.innerHTML = "✅ Conta criada com sucesso! Bem-vindo(a)!";
       
-      if (secao === 'pix' || secao === 'perfil') {
-        document.getElementById(secao).style.display = 'block';
-      } else {
-        document.getElementById('dashboard-content').style.display = 'block';
-      }
+      // 👇 Atualiza o email exibido no painel
+      document.getElementById("user-email").innerText = userCredential.user.email;
+      document.getElementById("user-email-perfil").innerText = userCredential.user.email;
+      document.getElementById("last-login").innerText = new Date().toLocaleString('pt-BR');
+      
+      // 👇 Só AGORA mostra o painel
+      document.getElementById("form-login").style.display = "none";
+      document.getElementById("form-dashboard").style.display = "block";
+      
+      // Limpa campos
+      document.getElementById("email").value = "";
+      document.getElementById("senha").value = "";
+    } else {
+      throw new Error("Usuário não foi criado.");
     }
-  </script>
 
-</body>
-</html>
+  } catch (error) {
+    console.error("Erro ao registrar:", error);
+    
+    let mensagem = "❌ Erro ao criar conta.";
+    
+    if (error.code === "auth/email-already-in-use") {
+      mensagem = "📧 Este email já está em uso. Tente fazer login.";
+    } else if (error.code === "auth/invalid-email") {
+      mensagem = "📧 Email inválido. Verifique e tente novamente.";
+    } else if (error.code === "auth/weak-password") {
+      mensagem = "🔐 Senha fraca. Use pelo menos 6 caracteres.";
+    }
+    
+    status.innerHTML = mensagem;
+  }
+}
