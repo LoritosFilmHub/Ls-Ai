@@ -3,46 +3,175 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>LS Ai Studio - Login Completo</title>
+  <title>LS Ai Studio - Sistema Completo</title>
   <style>
-    body { font-family: Arial, sans-serif; background: #0f0f23; color: white; text-align: center; padding: 20px; }
-    .container { max-width: 400px; margin: 50px auto; background: rgba(255,255,255,0.05); padding: 30px; border-radius: 15px; }
-    input { width: 100%; padding: 12px; margin: 10px 0; border-radius: 8px; border: none; background: rgba(255,255,255,0.1); color: white; }
-    button { background: #7b2ff7; color: white; padding: 14px 24px; border: none; border-radius: 12px; cursor: pointer; margin: 10px 0; width: 100%; font-weight: bold; }
-    button:hover { background: #5b00b5; }
-    #status { background: #000; color: lime; padding: 15px; border-radius: 8px; margin-top: 20px; font-family: monospace; }
-    .links { margin-top: 20px; }
-    .links a { color: #ff3366; text-decoration: none; margin: 0 10px; }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #1a1a2e, #16213e);
+      color: white;
+      text-align: center;
+      padding: 20px;
+      margin: 0;
+    }
+    .container {
+      max-width: 500px;
+      margin: 40px auto;
+      background: rgba(255,255,255,0.05);
+      padding: 30px;
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    }
+    input {
+      width: 100%;
+      padding: 14px;
+      margin: 12px 0;
+      border-radius: 10px;
+      border: none;
+      outline: none;
+      background: rgba(255,255,255,0.1);
+      color: white;
+      font-size: 16px;
+    }
+    button {
+      width: 100%;
+      padding: 14px;
+      margin: 12px 0;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: bold;
+      transition: all 0.3s ease;
+    }
+    .btn-primary { background: #7b2ff7; }
+    .btn-primary:hover { background: #5b00b5; }
+    .btn-google { background: #4285F4; }
+    .btn-google:hover { background: #3367D6; }
+    .btn-pix { background: #00cc66; }
+    .btn-pix:hover { background: #00aa44; }
+    .btn-logout { background: #ff3366; }
+    .btn-logout:hover { background: #cc0033; }
+    #status {
+      background: #000;
+      color: lime;
+      padding: 15px;
+      border-radius: 10px;
+      margin-top: 20px;
+      font-family: monospace;
+      min-height: 20px;
+    }
+    #form-dashboard, #pix, #perfil {
+      text-align: left;
+      padding: 20px;
+      background: rgba(0,0,0,0.1);
+      border-radius: 15px;
+      margin-top: 20px;
+    }
+    #pix-key {
+      margin-top: 15px;
+      padding: 15px;
+      background: #000;
+      color: lime;
+      border-radius: 8px;
+      font-family: monospace;
+      display: none;
+    }
+    .links {
+      margin: 20px 0;
+      display: flex;
+      gap: 15px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .links a {
+      color: #ff3366;
+      text-decoration: none;
+      padding: 8px 16px;
+      border-radius: 8px;
+      background: rgba(255,51,102,0.1);
+      transition: all 0.3s;
+    }
+    .links a:hover {
+      background: rgba(255,51,102,0.2);
+    }
+    h3, h4 {
+      margin: 15px 0 10px;
+      color: #7b2ff7;
+    }
+    ul {
+      padding-left: 20px;
+      text-align: left;
+    }
+    li {
+      margin: 5px 0;
+    }
   </style>
 </head>
 <body>
 
   <div class="container">
-    <h2>🔐 LS Ai Studio</h2>
+    <!-- FORMULÁRIO DE LOGIN -->
     <div id="form-login">
+      <h2>🔐 LS Ai Studio</h2>
       <input type="email" id="email" placeholder="Seu email" required>
       <input type="password" id="senha" placeholder="Sua senha" required>
-      <button onclick="login()">Entrar</button>
-      <button onclick="registrar()">Criar Conta</button>
+      <button class="btn-primary" onclick="login()">Entrar</button>
+      <button class="btn-primary" onclick="registrar()">Criar Conta</button>
+      <button class="btn-google" onclick="loginGoogle()">Entrar com Google</button>
     </div>
 
+    <!-- PAINEL DE CONTROLE -->
     <div id="form-dashboard" style="display:none;">
       <h3>🎉 Bem-vindo!</h3>
       <p id="user-email">carregando...</p>
-      <button onclick="logout()">Sair</button>
-      <div class="links">
-        <a href="#pix">💳 Meu Pix</a>
-        <a href="#perfil">👤 Meu Perfil</a>
+
+      <!-- DASHBOARD CONTENT -->
+      <div id="dashboard-content">
+        <h4>📈 Seu Painel</h4>
+        <p><strong>Plano:</strong> <span id="user-plan">Gratuito</span></p>
+        <p><strong>Último acesso:</strong> <span id="last-login">carregando...</span></p>
+        <button class="btn-pix" onclick="gerarChavePix()">🔑 Gerar Chave Pix</button>
+        <div id="pix-key"></div>
+        
+        <h4>📋 Histórico de Acesso</h4>
+        <ul id="historico">
+          <li>Acesso em 10/06/2025</li>
+          <li>Acesso em 09/06/2025</li>
+        </ul>
       </div>
+
+      <!-- NAVEGAÇÃO -->
+      <div class="links">
+        <a href="#" onclick="mostrarSecao('pix'); return false;">💳 Meu Pix</a>
+        <a href="#" onclick="mostrarSecao('perfil'); return false;">👤 Meu Perfil</a>
+      </div>
+
+      <!-- SEÇÕES ADICIONAIS -->
+      <div id="pix" style="display:none;">
+        <h4>💳 Área do Pix</h4>
+        <p>Aqui você gerencia seus pagamentos e chaves Pix.</p>
+        <button class="btn-pix" onclick="gerarChavePix()">🔄 Gerar Nova Chave</button>
+        <div id="pix-key-2" style="margin-top: 15px; padding: 10px; background: #000; border-radius: 5px; display:none;"></div>
+      </div>
+
+      <div id="perfil" style="display:none;">
+        <h4>👤 Meu Perfil</h4>
+        <p><strong>Email:</strong> <span id="user-email-perfil">carregando...</span></p>
+        <p><strong>Plano Atual:</strong> Gratuito</p>
+        <p><strong>Membro desde:</strong> 10/06/2025</p>
+        <button onclick="alert('Edição de perfil em breve!')">✏️ Editar Perfil</button>
+      </div>
+
+      <button class="btn-logout" onclick="logout()">Sair</button>
     </div>
 
-    <div id="status">Pronto para usar.</div>
+    <div id="status">Pronto para começar. Faça login ou crie sua conta.</div>
   </div>
 
   <script type="module">
     // ✅ IMPORTS
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-    import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+    import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
     // ✅ CONFIG
     const firebaseConfig = {
@@ -59,18 +188,20 @@
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
 
-    // ✅ MONITORA SE O USUÁRIO ESTÁ LOGADO
+    // ✅ MONITORA AUTENTICAÇÃO
     onAuthStateChanged(auth, (user) => {
       const status = document.getElementById("status");
       if (user) {
         document.getElementById("form-login").style.display = "none";
         document.getElementById("form-dashboard").style.display = "block";
-        document.getElementById("user-email").innerText = `Email: ${user.email}`;
+        document.getElementById("user-email").innerText = user.email;
+        document.getElementById("user-email-perfil").innerText = user.email;
+        document.getElementById("last-login").innerText = new Date().toLocaleString('pt-BR');
         status.innerHTML = "✅ Logado com sucesso!";
       } else {
         document.getElementById("form-login").style.display = "block";
         document.getElementById("form-dashboard").style.display = "none";
-        status.innerHTML = "🔴 Nenhum usuário logado.";
+        status.innerHTML = "🔴 Faça login para acessar seu painel.";
       }
     });
 
@@ -81,7 +212,7 @@
       const status = document.getElementById("status");
       try {
         await createUserWithEmailAndPassword(auth, email, senha);
-        status.innerHTML = "✅ Conta criada! Você será logado automaticamente.";
+        status.innerHTML = "✅ Conta criada! Bem-vindo!";
       } catch (error) {
         status.innerHTML = `❌ Erro: ${error.message}`;
       }
@@ -93,15 +224,47 @@
       const status = document.getElementById("status");
       try {
         await signInWithEmailAndPassword(auth, email, senha);
-        status.innerHTML = "✅ Login realizado!";
+        status.innerHTML = "✅ Login realizado com sucesso!";
       } catch (error) {
         status.innerHTML = `❌ Erro: ${error.message}`;
       }
     }
 
+    async function loginGoogle() {
+      const provider = new GoogleAuthProvider();
+      try {
+        await signInWithPopup(auth, provider);
+        document.getElementById("status").innerHTML = "✅ Logado com Google!";
+      } catch (error) {
+        document.getElementById("status").innerHTML = `❌ Erro Google: ${error.message}`;
+      }
+    }
+
     async function logout() {
       await signOut(auth);
-      document.getElementById("status").innerHTML = "👋 Você saiu.";
+      document.getElementById("status").innerHTML = "👋 Você saiu com sucesso.";
+    }
+
+    function gerarChavePix() {
+      const pixKey = `CPF+${Math.floor(10000000000 + Math.random() * 90000000000)}`;
+      let pixDiv = document.getElementById("pix-key");
+      if (!pixDiv || pixDiv.style.display === 'none') {
+        pixDiv = document.getElementById("pix-key-2");
+      }
+      pixDiv.style.display = "block";
+      pixDiv.innerHTML = `<strong>PIX GERADO:</strong> ${pixKey}<br><small>Copie e use no seu app bancário.</small>`;
+    }
+
+    function mostrarSecao(secao) {
+      document.getElementById('pix').style.display = 'none';
+      document.getElementById('perfil').style.display = 'none';
+      document.getElementById('dashboard-content').style.display = 'none';
+      
+      if (secao === 'pix' || secao === 'perfil') {
+        document.getElementById(secao).style.display = 'block';
+      } else {
+        document.getElementById('dashboard-content').style.display = 'block';
+      }
     }
   </script>
 
