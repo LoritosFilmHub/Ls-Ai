@@ -3,175 +3,32 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Pagamento Pix - LS Ai Studio</title>
+  <title>🔥 LS Ai Studio - Login + Pix</title>
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: linear-gradient(135deg, #5b00b5, #8e2de2);
-      color: white;
-      text-align: center;
-      padding: 40px;
-      margin: 0;
-    }
-
-    .container {
-      max-width: 450px;
-      margin: auto;
-      background: rgba(255, 255, 255, 0.1);
-      padding: 25px;
-      border-radius: 15px;
-      box-shadow: 0 0 20px rgba(0,0,0,0.4);
-    }
-
-    input[type="email"], input[type="password"] {
-      width: 100%;
-      padding: 12px;
-      margin: 8px 0;
-      border-radius: 8px;
-      border: none;
-      outline: none;
-      background: rgba(255,255,255,0.2);
-      color: white;
-    }
-
-    button {
-      background: #7b2ff7;
-      color: white;
-      font-size: 16px;
-      padding: 12px 20px;
-      border: none;
-      border-radius: 10px;
-      cursor: pointer;
-      margin: 8px 0;
-      transition: background 0.3s;
-    }
-
-    button:hover {
-      background: #5b00b5;
-    }
-
-    .auth-btn {
-      display: flex;
-      justify-content: center;
-      gap: 10px;
-      margin: 10px 0;
-    }
-
-    .auth-btn button {
-      flex: 1;
-      background: #333;
-    }
-
-    .pix-container img {
-      width: 250px;
-      border-radius: 10px;
-      margin: 20px auto;
-      background: white;
-      padding: 10px;
-      display: block;
-    }
-
-    .pix-texto {
-      background: rgba(255, 255, 255, 0.2);
-      padding: 15px;
-      border-radius: 10px;
-      margin: 15px 0;
-      font-size: 16px;
-      word-break: break-word;
-    }
-
-    .valores {
-      display: flex;
-      justify-content: center;
-      gap: 10px;
-      flex-wrap: wrap;
-      margin: 20px 0;
-    }
-
-    .valor-btn {
-      background: #ffcc00;
-      color: #333;
-      font-size: 16px;
-      font-weight: bold;
-      padding: 12px 18px;
-      border: none;
-      border-radius: 10px;
-      cursor: pointer;
-      transition: 0.3s;
-    }
-
-    .valor-btn:hover {
-      background: #ffaa00;
-    }
-
-    .rodape {
-      margin-top: 20px;
-      font-size: 14px;
-      opacity: 0.8;
-    }
-
-    .debug {
-      text-align: left;
-      background: #000;
-      padding: 10px;
-      border-radius: 8px;
-      font-size: 13px;
-      margin-top: 15px;
-      max-height: 150px;
-      overflow-y: auto;
-      color: #0f0;
-    }
-
-    a {
-      color: #fff;
-      text-decoration: underline;
-    }
+    body { font-family: Arial, sans-serif; background: linear-gradient(135deg, #5b00b5, #8e2de2); color: white; text-align: center; padding: 20px; margin: 0; }
+    .container { max-width: 450px; margin: auto; background: rgba(255,255,255,0.1); padding: 25px; border-radius: 15px; box-shadow: 0 0 20px rgba(0,0,0,0.4); }
+    input { width: 100%; padding: 12px; margin: 8px 0; border-radius: 8px; border: none; outline: none; background: rgba(255,255,255,0.2); color: white; }
+    button { background: #7b2ff7; color: white; padding: 12px 20px; border: none; border-radius: 10px; cursor: pointer; margin: 8px 0; }
+    button:hover { background: #5b00b5; }
+    .btn-test { background: #ff3366; }
+    #debug { background: black; color: lime; padding: 15px; border-radius: 8px; margin-top: 20px; font-family: monospace; text-align: left; max-height: 300px; overflow-y: auto; }
   </style>
 </head>
 <body>
 
-  <!-- Caixa de Login -->
-  <div class="container" id="login-box">
-    <h2>Entrar</h2>
-    <div class="auth-btn">
-      <button onclick="loginGoogle()">Google</button>
-      <button onclick="loginApple()">Apple</button>
-    </div>
-    <p>ou continue com e-mail</p>
-    <input type="email" id="email" placeholder="Email">
-    <input type="password" id="senha" placeholder="Senha">
-    <button onclick="loginEmail()">Entrar</button>
-    <p><a href="#" onclick="registrarEmail()">Ainda não está registrado? Inscrição</a></p>
-    <p><a href="#" onclick="resetSenha()">Esqueceu a senha?</a></p>
-  </div>
-
-  <!-- Caixa de Pix (Iniciada oculta) -->
-  <div class="container pix-container" id="pix-box" style="display:none;">
-    <h2>Pagamento via Pix</h2>
-    <p>Escolha um valor para gerar o QR Code:</p>
-    <div class="valores">
-      <button class="valor-btn" onclick="gerarPix(10)">R$ 10</button>
-      <button class="valor-btn" onclick="gerarPix(20)">R$ 20</button>
-      <button class="valor-btn" onclick="gerarPix(30)">R$ 30</button>
-    </div>
-    <img id="qrcode" src="https://via.placeholder.com/250x250?text=QR+Code+Pix" alt="QR Code Pix">
-    <div class="pix-texto">
-      <strong>Chave Pix:</strong><br>
-      <span id="pix-chave">1c814ae7-453e-470d-a9b4-9b26f1589d1a</span><br><br>
-      <strong>E-mail:</strong><br>
-      <span>loritos.videoshort.ai@gmail.com</span>
-    </div>
-    <button class="valor-btn" onclick="copiarPix()">📋 Copiar Chave Pix</button>
-    <p class="rodape">LS Ai Studio © 2025</p>
-    <div id="debug" class="debug"></div>
+  <div class="container">
+    <h2>🚀 TESTE DE EMERGÊNCIA</h2>
+    <p>Este botão IGNORA TUDO e tenta criar um usuário aleatório no Firebase.</p>
+    <button class="btn-test" onclick="testarFirebase()">💥 CLICA AQUI PRA TESTAR O FIREBASE</button>
+    <div id="debug">Aguardando ação...</div>
   </div>
 
   <script type="module">
-    // ✅ IMPORTS CORRIGIDOS — SEM ESPAÇOS, VERSÃO 12.3.0
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-app.js";
-    import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, sendPasswordResetEmail, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-auth.js";
+    // ✅ IMPORTS LIMPOS — SEM ESPAÇOS, VERSÃO ESTÁVEL
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
-    // ✅ CONFIGURAÇÃO DO FIREBASE — JÁ ESTÁ CORRETA
+    // ✅ CONFIG — A MESMA QUE VOCÊ TEM
     const firebaseConfig = {
       apiKey: "AIzaSyDKPoHfjTHnfwrZmqewtM6lTsDAA9tGIO4",
       authDomain: "ls-ai-studio-ee7b5.firebaseapp.com",
@@ -181,116 +38,47 @@
       appId: "1:900119249794:web:b45ce25dce982e2bacc59b"
     };
 
-    // ✅ INICIALIZAÇÃO — APP + AUTH
+    // ✅ INICIALIZAÇÃO
     const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app); // 👈 ESSE ERA O FDP QUE TAVA FALTANDO KKKKK
+    const auth = getAuth(app);
 
-    // ✅ DEBUG — MOSTRA LOGS NA TELA E NO CONSOLE
-    const logBox = document.getElementById("debug");
-    function log(msg) {
-      const time = new Date().toLocaleTimeString();
-      const formatted = `[${time}] ${msg}`;
-      console.log(formatted); // 👈 mostra no console do navegador
-      logBox.innerHTML += `<div style="color: ${msg.includes('Erro') ? '#ff6b6b' : '#aaffaa'};">${formatted}</div>`;
-      logBox.scrollTop = logBox.scrollHeight;
-    }
+    // ✅ FUNÇÃO DE TESTE BRUTAL
+    async function testarFirebase() {
+      const debug = document.getElementById("debug");
+      debug.innerHTML = "🔧 Iniciando teste...<br>";
 
-    // ✅ MONITORA ESTADO DO USUÁRIO — MOSTRA/ESCONDE TELAS
-    onAuthStateChanged(auth, (user) => {
-      if (user) {
-        log(`✅ Usuário logado: ${user.email}`);
-        document.getElementById("login-box").style.display = "none";
-        document.getElementById("pix-box").style.display = "block";
-      } else {
-        log("👋 Usuário deslogado.");
-        document.getElementById("login-box").style.display = "block";
-        document.getElementById("pix-box").style.display = "none";
+      try {
+        // ✅ GERA EMAIL E SENHA ALEATÓRIOS PRA NUNCA DAR CONFLITO
+        const timestamp = Date.now();
+        const email = `teste+${timestamp}@lsstudio.temp`;
+        const senha = `SenhaFort3!${timestamp}`;
+
+        debug.innerHTML += `📧 Email: ${email}<br>`;
+        debug.innerHTML += `🔒 Tentando criar usuário...<br>`;
+
+        // ✅ TENTA CRIAR O USUÁRIO
+        const userCredential = await createUserWithEmailAndPassword(auth, email, senha);
+
+        debug.innerHTML += `✅ SUCESSO!<br>`;
+        debug.innerHTML += `🆔 UID: ${userCredential.user.uid}<br>`;
+        debug.innerHTML += `✉️ Email: ${userCredential.user.email}<br>`;
+        debug.innerHTML += `🎉 TUDO ESTÁ FUNCIONANDO PERFEITAMENTE.<br>`;
+        debug.innerHTML += `👉 Agora você pode usar o sistema normal.<br>`;
+
+        console.log("✅ Usuário criado:", userCredential.user);
+
+      } catch (error) {
+        debug.innerHTML += `❌ FALHOU!<br>`;
+        debug.innerHTML += `📛 Código: <strong>${error.code}</strong><br>`;
+        debug.innerHTML += `💬 Mensagem: ${error.message}<br>`;
+        debug.innerHTML += `🚨 COPIE ESSA MENSAGEM E MANDE PRA MIM.<br>`;
+
+        console.error("🔥 Erro completo:", error);
       }
-    });
-
-    // ✅ LOGIN COM EMAIL/SENHA
-    function loginEmail() {
-      const email = document.getElementById("email").value;
-      const senha = document.getElementById("senha").value;
-      signInWithEmailAndPassword(auth, email, senha)
-        .then((userCredential) => {
-          log(`🔐 Login bem-sucedido: ${email}`);
-        })
-        .catch((error) => {
-          log(`❌ Erro no login: ${error.message}`);
-        });
     }
 
-    // ✅ REGISTRAR NOVO USUÁRIO
-    function registrarEmail() {
-      const email = document.getElementById("email").value;
-      const senha = document.getElementById("senha").value;
-      createUserWithEmailAndPassword(auth, email, senha)
-        .then((userCredential) => {
-          log(`✅ Conta criada: ${email}`);
-        })
-        .catch((error) => {
-          log(`❌ Erro ao criar conta: ${error.message}`);
-        });
-    }
-
-    // ✅ REDEFINIR SENHA
-    function resetSenha() {
-      const email = document.getElementById("email").value;
-      sendPasswordResetEmail(auth, email)
-        .then(() => {
-          log(`✉️ Email de redefinição enviado para: ${email}`);
-        })
-        .catch((error) => {
-          log(`❌ Erro ao enviar reset: ${error.message}`);
-        });
-    }
-
-    // ✅ LOGIN COM GOOGLE
-    function loginGoogle() {
-      const provider = new GoogleAuthProvider();
-      signInWithPopup(auth, provider)
-        .then((result) => {
-          log(`✅ Login Google: ${result.user.email}`);
-        })
-        .catch((error) => {
-          log(`❌ Erro Google: ${error.message}`);
-        });
-    }
-
-    // ✅ LOGIN COM APPLE (SIMULADO)
-    function loginApple() {
-      alert("🍎 Login com Apple não implementado neste exemplo.");
-      log("Tentativa de login com Apple");
-    }
-
-    // ✅ GERAR PIX COM VALOR DINÂMICO + QR CODE REAL
-    function gerarPix(valor) {
-      const qrcode = document.getElementById("qrcode");
-      // Gera QR Code visual com o valor escolhido
-      qrcode.src = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=PIX${valor}.00-LS-AI-STUDIO`;
-      log(`💰 QR Code gerado para R$${valor}`);
-    }
-
-    // ✅ COPIAR CHAVE PIX
-    function copiarPix() {
-      const chave = document.getElementById("pix-chave").innerText;
-      navigator.clipboard.writeText(chave).then(() => {
-        alert("✅ Chave Pix copiada com sucesso!");
-        log("📋 Chave Pix copiada.");
-      }).catch(err => {
-        log("❌ Erro ao copiar: " + err);
-      });
-    }
-
-    // ✅ EXPÕE FUNÇÕES PRO HTML
-    window.gerarPix = gerarPix;
-    window.copiarPix = copiarPix;
-    window.loginEmail = loginEmail;
-    window.registrarEmail = registrarEmail;
-    window.resetSenha = resetSenha;
-    window.loginGoogle = loginGoogle;
-    window.loginApple = loginApple;
+    // ✅ EXPÕE A FUNÇÃO
+    window.testarFirebase = testarFirebase;
   </script>
 
 </body>
