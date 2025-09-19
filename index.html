@@ -54,15 +54,23 @@
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
 
   <script>
-    // 🔑 Configuração do Firebase (depois vamos ajustar com dados reais do Console)
-    const firebaseConfig = {
-      apiKey: "AIzaSyDKPoHfjTHnfwrZmqewtM6lTsDAA9tGIO4,
-      authDomain: "ls-ai-studio.firebaseapp.com",       // 🔄 trocar depois pelo real
-      projectId: "ls-ai-studio",                        // 🔄 trocar depois pelo real
-      storageBucket: "ls-ai-studio.appspot.com",        // 🔄 trocar depois pelo real
-      messagingSenderId: "123456789000",                // 🔄 trocar depois pelo real
-      appId: "1:123456789000:web:abcdef1234567890"      // 🔄 trocar depois pelo real
-    };
+// Import the functions you need from the SDKs you need
+import { initializeApp } from "firebase/app";
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
+
+// Your web app's Firebase configuration
+const firebaseConfig = {
+  apiKey: "AIzaSyDKPoHfjTHnfwrZmqewtM6lTsDAA9tGIO4",
+  authDomain: "ls-ai-studio-ee7b5.firebaseapp.com",
+  projectId: "ls-ai-studio-ee7b5",
+  storageBucket: "ls-ai-studio-ee7b5.firebasestorage.app",
+  messagingSenderId: "900119249794",
+  appId: "1:900119249794:web:b45ce25dce982e2bacc59b"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
 
     // Inicializa Firebase
     firebase.initializeApp(firebaseConfig);
