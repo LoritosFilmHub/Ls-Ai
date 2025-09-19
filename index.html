@@ -1,149 +1,187 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Lorito's AI Studio - Login</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Login - Ls AI Studio (Debug)</title>
   <style>
+    :root { --bg: #0f0720; --card: #151515; --accent: #a855f7; --text: #fff; }
     body {
-      font-family: Arial, sans-serif;
-      background: linear-gradient(135deg, #1a0033, #330066);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      margin: 0;
-      color: #fff;
+      margin:0; min-height:100vh; display:flex; align-items:center; justify-content:center;
+      background: linear-gradient(135deg,#090018,#1a0033);
+      font-family: Inter, Arial, sans-serif; color:var(--text);
     }
-    .container {
-      background: #1c1c1c;
-      padding: 30px;
-      border-radius: 12px;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.5);
-      width: 320px;
-      text-align: center;
+    .card {
+      width: 360px; background:var(--card); padding:22px; border-radius:12px;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.6); position:relative;
     }
-    h2 {
-      margin-bottom: 20px;
+    h2 { margin:0 0 12px 0; font-size:20px; text-align:center; }
+    input { width:100%; padding:10px 12px; margin:8px 0; border-radius:8px; border:0; outline: none; }
+    button { width:100%; padding:10px; border-radius:8px; border:0; background:var(--accent); color:#fff; font-weight:700; cursor:pointer; }
+    .toggle { margin-top:10px; text-align:center; font-size:13px; }
+    .toggle a { color:var(--accent); cursor:pointer; text-decoration:none; font-weight:700; }
+    #logoutBtn { display:none; margin-top:10px; background:crimson; }
+    /* debug box */
+    #debug {
+      margin-top:14px; background:#0b0b0b; color:#f6f6f6; padding:10px; border-radius:8px;
+      max-height:160px; overflow:auto; font-family:monospace; font-size:12px;
+      white-space:pre-wrap; box-shadow: inset 0 0 0 1px rgba(255,255,255,0.02);
     }
-    input {
-      width: 100%;
-      padding: 12px;
-      margin: 10px 0;
-      border: none;
-      border-radius: 8px;
-    }
-    button {
-      width: 100%;
-      padding: 12px;
-      background: #a855f7;
-      border: none;
-      border-radius: 8px;
-      color: white;
-      font-weight: bold;
-      cursor: pointer;
-    }
-    button:hover {
-      background: #9333ea;
-    }
-    .toggle {
-      margin-top: 15px;
-      font-size: 14px;
-    }
-    .toggle a {
-      color: #a855f7;
-      cursor: pointer;
-      text-decoration: none;
-    }
+    .hint { font-size:12px; opacity:0.8; margin-top:8px; text-align:center; }
   </style>
 </head>
 <body>
-  <div class="container">
+  <div class="card" role="main">
     <h2 id="formTitle">Entrar</h2>
-    <form id="authForm">
-      <input type="email" id="email" placeholder="Email" required />
-      <input type="password" id="password" placeholder="Senha" required />
-      <button type="submit" id="submitBtn">Entrar</button>
+
+    <form id="authForm" autocomplete="off">
+      <input id="email" type="email" placeholder="Email" required />
+      <input id="password" type="password" placeholder="Senha" required />
+      <button id="submitBtn" type="submit">Entrar</button>
     </form>
+
     <div class="toggle">
       <span id="toggleText">Ainda não tem conta?</span>
       <a id="toggleLink">Registrar</a>
     </div>
-    <button id="logoutBtn" style="display:none; margin-top:10px;">Sair</button>
+
+    <button id="logoutBtn">Sair</button>
+
+    <div id="debug" aria-live="polite"></div>
+    <div class="hint">Se aparecer erro, copia ele e manda aqui pra eu ver.</div>
   </div>
 
-  <!-- Firebase App + Auth -->
   <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
-    import { 
-      getAuth, 
-      signInWithEmailAndPassword, 
-      createUserWithEmailAndPassword, 
-      signOut,
-      onAuthStateChanged 
-    } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
+    (async () => {
+      const dbgEl = document.getElementById('debug');
+      const append = (t) => {
+        console.log(t);
+        if (!dbgEl) return;
+        const now = new Date().toLocaleTimeString();
+        dbgEl.textContent += `[${now}] ${t}\n`;
+        dbgEl.scrollTop = dbgEl.scrollHeight;
+      };
 
-    // Configuração Firebase
-    const firebaseConfig = {
-      apiKey: "AIzaSyDKPoHfjTHnfwrZmqewtM6lTsDAA9tGIO4",
-      authDomain: "ls-ai-studio-ee7b5.firebaseapp.com",
-      projectId: "ls-ai-studio-ee7b5",
-      storageBucket: "ls-ai-studio-ee7b5.appspot.com",
-      messagingSenderId: "900119249794",
-      appId: "1:900119249794:web:b45ce25dce982e2bacc59b"
-    };
+      // Global listeners para capturar erros que causariam "tela branca"
+      window.addEventListener('error', (ev) => append('Window error: ' + (ev.message || ev.error) + ' @ ' + ev.filename + ':' + ev.lineno));
+      window.addEventListener('unhandledrejection', (ev) => append('UnhandledRejection: ' + (ev.reason?.message ?? JSON.stringify(ev.reason))));
 
-    // Inicializar Firebase
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
+      // Se o arquivo estiver sendo aberto via file:// -> imports podem falhar
+      if (location.protocol === 'file:') {
+        append('ATENÇÃO: Você abriu o arquivo via file:// — os imports do Firebase via CDN não funcionarão. Rode via HTTP (ex: python -m http.server) ou suba no GitHub Pages.');
+      }
 
-    let isLogin = true;
-
-    // Formulário de Login/Registro
-    document.getElementById("authForm").addEventListener("submit", async (e) => {
-      e.preventDefault();
-      const email = document.getElementById("email").value.trim();
-      const password = document.getElementById("password").value.trim();
       try {
-        if (isLogin) {
-          await signInWithEmailAndPassword(auth, email, password);
-        } else {
-          await createUserWithEmailAndPassword(auth, email, password);
-        }
+        append('Importando Firebase via CDN (dinâmico)...');
+        const appMod = await import('https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js');
+        const authMod = await import('https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js');
+
+        const { initializeApp } = appMod;
+        const { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, signOut } = authMod;
+
+        append('Imports OK. Inicializando Firebase...');
+
+        const firebaseConfig = {
+          apiKey: "AIzaSyDKPoHfjTHnfwrZmqewtM6lTsDAA9tGIO4",
+          authDomain: "ls-ai-studio-ee7b5.firebaseapp.com",
+          projectId: "ls-ai-studio-ee7b5",
+          // usei o formato appspot.com (padrão). Se no console do Firebase seu bucket tiver outro nome,
+          // substitua aqui exatamente como aparece no Firebase Console.
+          storageBucket: "ls-ai-studio-ee7b5.appspot.com",
+          messagingSenderId: "900119249794",
+          appId: "1:900119249794:web:b45ce25dce982e2bacc59b"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+
+        append('Firebase inicializado. Preparando handlers...');
+
+        // Elements
+        const emailEl = document.getElementById('email');
+        const passEl = document.getElementById('password');
+        const form = document.getElementById('authForm');
+        const submitBtn = document.getElementById('submitBtn');
+        const toggleLink = document.getElementById('toggleLink');
+        const toggleText = document.getElementById('toggleText');
+        const formTitle = document.getElementById('formTitle');
+        const logoutBtn = document.getElementById('logoutBtn');
+
+        let isLogin = true;
+
+        form.addEventListener('submit', async (e) => {
+          e.preventDefault();
+          const email = (emailEl.value || '').trim();
+          const password = (passEl.value || '').trim();
+          if (!email || !password) { append('Preencha email e senha.'); return; }
+          submitBtn.disabled = true;
+          try {
+            append(isLogin ? `Tentando logar ${email}...` : `Tentando registrar ${email}...`);
+            if (isLogin) {
+              const res = await signInWithEmailAndPassword(auth, email, password);
+              append('Login OK: ' + (res.user?.email ?? 'sem-email'));
+            } else {
+              const res = await createUserWithEmailAndPassword(auth, email, password);
+              append('Registro OK: ' + (res.user?.email ?? 'sem-email'));
+            }
+          } catch (err) {
+            append('Erro auth: ' + (err?.code ?? err?.message ?? JSON.stringify(err)));
+            alert('Erro: ' + (err?.message ?? err?.code ?? err));
+          } finally {
+            submitBtn.disabled = false;
+          }
+        });
+
+        toggleLink.addEventListener('click', (e) => {
+          e.preventDefault();
+          isLogin = !isLogin;
+          formTitle.innerText = isLogin ? 'Entrar' : 'Registrar';
+          submitBtn.innerText = isLogin ? 'Entrar' : 'Registrar';
+          toggleText.innerText = isLogin ? 'Ainda não tem conta?' : 'Já tem conta?';
+          toggleLink.innerText = isLogin ? 'Registrar' : 'Entrar';
+        });
+
+        logoutBtn.addEventListener('click', async () => {
+          try {
+            await signOut(auth);
+            append('Logout efetuado.');
+          } catch (err) {
+            append('Erro no logout: ' + (err?.message ?? err));
+          }
+        });
+
+        onAuthStateChanged(auth, (user) => {
+          if (user) {
+            append('onAuthStateChanged: usuário logado -> ' + (user.email ?? user.uid));
+            logoutBtn.style.display = 'block';
+            // NÃO redirecionar automaticamente — só mostra o link pra ir pro app,
+            // assim evitamos loop e white-screen por redirect mal configurado.
+            if (!document.getElementById('goAppBtn')) {
+              const btn = document.createElement('button');
+              btn.id = 'goAppBtn';
+              btn.textContent = 'Ir para a página do app';
+              btn.style.marginTop = '8px';
+              btn.onclick = () => {
+                // coloque aqui o URL final do seu app no GitHub Pages:
+                window.location.href = "https://SEU_USUARIO.github.io/Ls-Ai-Studio/";
+              };
+              document.querySelector('.card').appendChild(btn);
+            }
+          } else {
+            append('onAuthStateChanged: usuário deslogado.');
+            logoutBtn.style.display = 'none';
+            const goBtn = document.getElementById('goAppBtn');
+            if (goBtn) goBtn.remove();
+          }
+        });
+
+        append('Tudo pronto. Tente logar/registrar. Se der erro, copia do DEBUG ou do Console e manda aqui.');
       } catch (err) {
-        alert("⚠️ Erro: " + err.message);
+        append('Erro crítico: ' + (err?.message ?? err));
+        append('Stack: ' + (err?.stack ?? 'sem stack'));
+        // não rethrow — assim a página não fica em branco e você vê a mensagem.
       }
-    });
-
-    // Alternar Login/Registro
-    document.getElementById("toggleLink").addEventListener("click", (e) => {
-      e.preventDefault();
-      isLogin = !isLogin;
-      document.getElementById("formTitle").innerText = isLogin ? "Entrar" : "Registrar";
-      document.getElementById("submitBtn").innerText = isLogin ? "Entrar" : "Registrar";
-      document.getElementById("toggleText").innerText = isLogin ? "Ainda não tem conta?" : "Já tem conta?";
-      document.getElementById("toggleLink").innerText = isLogin ? "Registrar" : "Entrar";
-    });
-
-    // Monitorar estado de autenticação
-    onAuthStateChanged(auth, (user) => {
-      if (user) {
-        console.log("Usuário logado:", user.email);
-        document.getElementById("logoutBtn").style.display = "block";
-        // Redireciona só se não estiver já na página inicial
-        if (!window.location.href.includes("index.html")) {
-          window.location.href = "index.html";
-        }
-      } else {
-        console.log("Usuário deslogado");
-        document.getElementById("logoutBtn").style.display = "none";
-      }
-    });
-
-    // Logout
-    document.getElementById("logoutBtn").addEventListener("click", async () => {
-      await signOut(auth);
-    });
+    })();
   </script>
 </body>
 </html>
