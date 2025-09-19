@@ -3,51 +3,123 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Firebase Auth Demo</title>
+  <title>Pagamento Pix - LS Ai Studio</title>
   <style>
-    body { font-family: Arial, sans-serif; background: #121212; color: #fff; text-align: center; }
-    .box { display: none; margin-top: 50px; padding: 20px; background: #1e1e1e; border-radius: 8px; width: 300px; margin-left: auto; margin-right: auto; }
-    input { display: block; margin: 10px auto; padding: 8px; width: 90%; }
-    button { padding: 8px 12px; margin: 5px; cursor: pointer; border: none; border-radius: 4px; }
-    .login-btn { background: #4caf50; color: #fff; }
-    .register-btn { background: #2196f3; color: #fff; }
-    .logout-btn { background: #f44336; color: #fff; }
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #5b00b5, #8e2de2);
+      color: white;
+      text-align: center;
+      padding: 40px;
+    }
+
+    .pix-container {
+      max-width: 450px;
+      margin: auto;
+      background: rgba(255, 255, 255, 0.1);
+      padding: 25px;
+      border-radius: 15px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.4);
+    }
+
+    .pix-container img {
+      width: 250px;
+      border-radius: 10px;
+      margin: 20px auto;
+      background: white;
+      padding: 10px;
+      display: block;
+    }
+
+    .pix-texto {
+      background: rgba(255, 255, 255, 0.2);
+      padding: 15px;
+      border-radius: 10px;
+      margin: 15px 0;
+      font-size: 16px;
+      word-break: break-word;
+    }
+
+    .valores {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin: 20px 0;
+    }
+
+    .valor-btn {
+      background: #ffcc00;
+      color: #333;
+      font-size: 16px;
+      font-weight: bold;
+      padding: 12px 18px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .valor-btn:hover {
+      background: #ffaa00;
+    }
+
+    .rodape {
+      margin-top: 20px;
+      font-size: 14px;
+      opacity: 0.8;
+    }
+
+    .debug {
+      text-align: left;
+      background: #000;
+      padding: 10px;
+      border-radius: 8px;
+      font-size: 13px;
+      margin-top: 15px;
+      max-height: 150px;
+      overflow-y: auto;
+    }
   </style>
 </head>
 <body>
-  <h1>🔥 Firebase Auth Demo</h1>
+  <div class="pix-container">
+    <h2>Pagamento via Pix</h2>
+    <p>Escolha um valor para gerar o QR Code:</p>
 
-  <!-- Login -->
-  <div id="login-box" class="box">
-    <h2>Login</h2>
-    <input type="email" id="loginEmail" placeholder="Email">
-    <input type="password" id="loginPassword" placeholder="Senha">
-    <button class="login-btn" id="loginBtn">Entrar</button>
-    <p>Ainda não tem conta? <a href="#" id="showRegister">Cadastre-se</a></p>
-  </div>
+    <!-- Botões de valores -->
+    <div class="valores">
+      <button class="valor-btn" onclick="gerarPix(10)">R$ 10</button>
+      <button class="valor-btn" onclick="gerarPix(20)">R$ 20</button>
+      <button class="valor-btn" onclick="gerarPix(30)">R$ 30</button>
+    </div>
 
-  <!-- Registro -->
-  <div id="register-box" class="box">
-    <h2>Cadastro</h2>
-    <input type="email" id="registerEmail" placeholder="Email">
-    <input type="password" id="registerPassword" placeholder="Senha">
-    <button class="register-btn" id="registerBtn">Cadastrar</button>
-    <p>Já tem conta? <a href="#" id="showLogin">Entrar</a></p>
-  </div>
+    <!-- QR Code -->
+    <img id="qrcode" src="assets/qrcode-pix.png" alt="QR Code Pix">
 
-  <!-- Dashboard -->
-  <div id="home" class="box">
-    <h2>Bem-vindo 🚀</h2>
-    <p id="userEmail"></p>
-    <button class="logout-btn" id="logoutBtn">Sair</button>
+    <!-- Chave Pix -->
+    <div class="pix-texto">
+      <strong>Chave Pix:</strong><br>
+      <span id="pix-chave">1c814ae7-453e-470d-a9b4-9b26f1589d1a</span><br><br>
+      <strong>E-mail:</strong><br>
+      <span>loritos.videoshort.ai@gmail.com</span>
+    </div>
+
+    <!-- Botão copiar -->
+    <button class="valor-btn" onclick="copiarPix()">📋 Copiar Chave Pix</button>
+
+    <p class="rodape">LS Ai Studio © 2025</p>
+
+    <!-- Debug Firebase -->
+    <div id="debug" class="debug"></div>
   </div>
 
   <!-- Firebase -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
-    import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
 
-    // Configuração do Firebase
+    // Configuração Firebase corrigida
     const firebaseConfig = {
       apiKey: "AIzaSyDKPoHfjTHnfwrZmqewtM6lTsDAA9tGIO4",
       authDomain: "ls-ai-studio-ee7b5.firebaseapp.com",
@@ -57,61 +129,44 @@
       appId: "1:900119249794:web:b45ce25dce982e2bacc59b"
     };
 
-    // Inicializa Firebase
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
 
-    // Alternar telas
-    const loginBox = document.getElementById("login-box");
-    const registerBox = document.getElementById("register-box");
-    const homeBox = document.getElementById("home");
+    // Debug
+    const logBox = document.getElementById("debug");
+    function log(msg) {
+      const time = new Date().toLocaleTimeString();
+      logBox.innerHTML += `[${time}] ${msg}<br>`;
+      logBox.scrollTop = logBox.scrollHeight;
+    }
 
-    document.getElementById("showRegister").addEventListener("click", () => {
-      loginBox.style.display = "none";
-      registerBox.style.display = "block";
-    });
+    log("Firebase inicializado. Aguardando autenticação...");
 
-    document.getElementById("showLogin").addEventListener("click", () => {
-      registerBox.style.display = "none";
-      loginBox.style.display = "block";
-    });
-
-    // Login
-    document.getElementById("loginBtn").addEventListener("click", () => {
-      const email = document.getElementById("loginEmail").value;
-      const password = document.getElementById("loginPassword").value;
-      signInWithEmailAndPassword(auth, email, password)
-        .then(() => console.log("Login OK"))
-        .catch(err => alert("Erro no login: " + err.message));
-    });
-
-    // Cadastro
-    document.getElementById("registerBtn").addEventListener("click", () => {
-      const email = document.getElementById("registerEmail").value;
-      const password = document.getElementById("registerPassword").value;
-      createUserWithEmailAndPassword(auth, email, password)
-        .then(() => console.log("Cadastro OK"))
-        .catch(err => alert("Erro no cadastro: " + err.message));
-    });
-
-    // Logout
-    document.getElementById("logoutBtn").addEventListener("click", () => {
-      signOut(auth).then(() => console.log("Saiu com sucesso"));
-    });
-
-    // Estado da autenticação
     onAuthStateChanged(auth, (user) => {
       if (user) {
-        loginBox.style.display = "none";
-        registerBox.style.display = "none";
-        homeBox.style.display = "block";
-        document.getElementById("userEmail").innerText = "Logado como: " + user.email;
+        log("Usuário logado: " + user.email);
       } else {
-        loginBox.style.display = "block";
-        registerBox.style.display = "none";
-        homeBox.style.display = "none";
+        log("Usuário deslogado.");
       }
     });
+
+    // Funções Pix
+    function gerarPix(valor) {
+      alert("🔗 Você escolheu pagar R$ " + valor + ". O QR Code será usado para esse valor.");
+      log("QR Code gerado para R$ " + valor);
+    }
+
+    window.gerarPix = gerarPix;
+
+    function copiarPix() {
+      const chave = document.getElementById("pix-chave").innerText;
+      navigator.clipboard.writeText(chave).then(() => {
+        alert("✅ Chave Pix copiada com sucesso!");
+        log("Chave Pix copiada.");
+      });
+    }
+
+    window.copiarPix = copiarPix;
   </script>
 </body>
 </html>
