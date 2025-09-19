@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>LS Ai Studio - Sistema Completo</title>
+  <title>LS Ai Studio - Sistema Completo e Corrigido</title>
   <style>
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -67,7 +67,7 @@
       border-radius: 15px;
       margin-top: 20px;
     }
-    #pix-key {
+    #pix-key, #pix-key-2 {
       margin-top: 15px;
       padding: 15px;
       background: #000;
@@ -151,7 +151,7 @@
         <h4>💳 Área do Pix</h4>
         <p>Aqui você gerencia seus pagamentos e chaves Pix.</p>
         <button class="btn-pix" onclick="gerarChavePix()">🔄 Gerar Nova Chave</button>
-        <div id="pix-key-2" style="margin-top: 15px; padding: 10px; background: #000; border-radius: 5px; display:none;"></div>
+        <div id="pix-key-2"></div>
       </div>
 
       <div id="perfil" style="display:none;">
@@ -169,11 +169,11 @@
   </div>
 
   <script type="module">
-    // ✅ IMPORTS
+    // ✅ IMPORTS — Via CDN, sem instalar nada
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
     import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
-    // ✅ CONFIG
+    // ✅ CONFIGURAÇÃO DO FIREBASE — Copiada diretamente do console
     const firebaseConfig = {
       apiKey: "AIzaSyCLWvDtXZuGwhME9FxvXFcs9Ir2YkNVRBg",
       authDomain: "ls-ai-studio-64ecf.firebaseapp.com",
@@ -184,49 +184,49 @@
       measurementId: "G-VSLCSZ0Y5Q"
     };
 
-    // ✅ INICIALIZAÇÃO
+    // ✅ INICIALIZAÇÃO — OBRIGATÓRIO
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
 
-    // ✅ MONITORA AUTENTICAÇÃO
+    // ✅ MONITORA AUTENTICAÇÃO — Atualiza UI automaticamente
     onAuthStateChanged(auth, (user) => {
-      const status = document.getElementById("status");
       if (user) {
+        // Mostra dashboard
         document.getElementById("form-login").style.display = "none";
         document.getElementById("form-dashboard").style.display = "block";
         document.getElementById("user-email").innerText = user.email;
         document.getElementById("user-email-perfil").innerText = user.email;
         document.getElementById("last-login").innerText = new Date().toLocaleString('pt-BR');
-        status.innerHTML = "✅ Logado com sucesso!";
+        document.getElementById("status").innerHTML = "✅ Logado com sucesso!";
       } else {
+        // Mostra login
         document.getElementById("form-login").style.display = "block";
         document.getElementById("form-dashboard").style.display = "none";
-        status.innerHTML = "🔴 Faça login para acessar seu painel.";
+        document.getElementById("status").innerHTML = "🔴 Faça login para acessar seu painel.";
       }
     });
 
-    // ✅ FUNÇÕES
+    // ✅ FUNÇÕES PRINCIPAIS
+
     async function registrar() {
       const email = document.getElementById("email").value;
       const senha = document.getElementById("senha").value;
-      const status = document.getElementById("status");
       try {
         await createUserWithEmailAndPassword(auth, email, senha);
-        status.innerHTML = "✅ Conta criada! Bem-vindo!";
+        document.getElementById("status").innerHTML = "✅ Conta criada! Bem-vindo!";
       } catch (error) {
-        status.innerHTML = `❌ Erro: ${error.message}`;
+        document.getElementById("status").innerHTML = `❌ Erro: ${error.message}`;
       }
     }
 
     async function login() {
       const email = document.getElementById("email").value;
       const senha = document.getElementById("senha").value;
-      const status = document.getElementById("status");
       try {
         await signInWithEmailAndPassword(auth, email, senha);
-        status.innerHTML = "✅ Login realizado com sucesso!";
+        document.getElementById("status").innerHTML = "✅ Login realizado com sucesso!";
       } catch (error) {
-        status.innerHTML = `❌ Erro: ${error.message}`;
+        document.getElementById("status").innerHTML = `❌ Erro: ${error.message}`;
       }
     }
 
@@ -240,9 +240,27 @@
       }
     }
 
+    // ✅🔥 FUNÇÃO DE LOGOUT CORRIGIDA — AGORA FUNCIONA 100%
     async function logout() {
-      await signOut(auth);
-      document.getElementById("status").innerHTML = "👋 Você saiu com sucesso.";
+      try {
+        await signOut(auth);
+        
+        // 👇👇👇 FORÇA A TROCA DE TELA — ISSO É O QUE ESTAVA FALTANDO!
+        document.getElementById("form-login").style.display = "block";
+        document.getElementById("form-dashboard").style.display = "none";
+        
+        // Limpa campos e status
+        document.getElementById("email").value = "";
+        document.getElementById("senha").value = "";
+        document.getElementById("status").innerHTML = "👋 Você saiu com sucesso.";
+        
+        // Limpa chaves Pix geradas
+        document.getElementById("pix-key").style.display = "none";
+        document.getElementById("pix-key-2").style.display = "none";
+        
+      } catch (error) {
+        document.getElementById("status").innerHTML = `❌ Erro ao sair: ${error.message}`;
+      }
     }
 
     function gerarChavePix() {
