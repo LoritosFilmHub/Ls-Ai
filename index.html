@@ -3,38 +3,222 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Pagamento Pix - LS Ai Studio</title>
-  <link rel="stylesheet" href="style.css">
+  <title>LS Ai Studio - Login & Cadastro</title>
+  <style>
+    body {
+      font-family: "Poppins", Arial, sans-serif;
+      background: linear-gradient(180deg, #000000, #2c003e, #6a1b9a);
+      color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    .container {
+      background: rgba(0, 0, 0, 0.7);
+      padding: 40px;
+      border-radius: 20px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.6);
+      width: 350px;
+      text-align: center;
+      animation: fadeIn 0.5s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    h2 {
+      margin-bottom: 20px;
+      font-weight: 600;
+    }
+
+    .social-btn {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .btn-social {
+      flex: 1;
+      background: transparent;
+      border: 1px solid #9b59b6;
+      color: white;
+      padding: 10px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .btn-social:hover {
+      background: #9b59b6;
+    }
+
+    input {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      border: none;
+      border-radius: 8px;
+      background: #1a1a1a;
+      color: white;
+      font-size: 14px;
+    }
+
+    input:focus {
+      outline: 2px solid #9b59b6;
+    }
+
+    .options {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      margin: 10px 0;
+      color: #bbb;
+    }
+
+    .options a {
+      color: #9b59b6;
+      text-decoration: none;
+    }
+
+    .btn {
+      width: 100%;
+      padding: 12px;
+      margin-top: 15px;
+      border: none;
+      border-radius: 8px;
+      background: #9b59b6;
+      color: white;
+      font-weight: bold;
+      font-size: 16px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .btn:hover {
+      background: #8e44ad;
+    }
+
+    .signup {
+      margin-top: 15px;
+      font-size: 14px;
+    }
+
+    .signup a {
+      color: #9b59b6;
+      text-decoration: none;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .lang {
+      margin-top: 15px;
+      font-size: 12px;
+      color: #aaa;
+    }
+
+    .hidden {
+      display: none;
+    }
+  </style>
 </head>
 <body>
-  <div class="pix-container">
-    <h2>Pagamento via Pix</h2>
-    <p>Escolha um valor para gerar o QR Code:</p>
+  <!-- TELA DE LOGIN -->
+  <div id="login" class="container">
+    <h2>Entrar</h2>
 
-    <!-- Botões de valores -->
-    <div class="valores">
-      <button class="valor-btn" onclick="gerarPix(10)">R$ 10</button>
-      <button class="valor-btn" onclick="gerarPix(20)">R$ 20</button>
-      <button class="valor-btn" onclick="gerarPix(30)">R$ 30</button>
+    <div class="social-btn">
+      <button class="btn-social">🔎 Google</button>
+      <button class="btn-social">🍏 Apple</button>
     </div>
 
-    <!-- QR Code -->
-    <img id="qrcode" src="assets/qrcode-pix.png" alt="QR Code Pix">
+    <p>ou continuar com e-mail</p>
 
-    <!-- Chave Pix -->
-    <div class="pix-texto">
-      <strong>Chave Pix:</strong><br>
-      <span id="pix-chave">1c814ae7-453e-470d-a9b4-9b26f1589d1a</span><br><br>
-      <strong>E-mail:</strong><br>
-      <span>loritos.videoshort.ai@gmail.com</span>
+    <input type="email" id="loginEmail" placeholder="Email">
+    <input type="password" id="loginSenha" placeholder="Senha">
+
+    <div class="options">
+      <label><input type="checkbox"> Lembre-se de mim</label>
+      <a href="#">Esqueceu a senha?</a>
     </div>
 
-    <!-- Botão copiar -->
-    <button class="valor-btn" onclick="copiarPix()">📋 Copiar Chave Pix</button>
+    <button class="btn" onclick="entrar()">Entrar</button>
 
-    <p class="rodape">LS Ai Studio © 2025</p>
+    <p class="signup">Ainda não está registrado? <a onclick="mostrarCadastro()">Inscrição</a></p>
+    <p class="lang">🌐 Português (Brasil)</p>
   </div>
 
-  <script src="script.js"></script>
+  <!-- TELA DE CADASTRO -->
+  <div id="cadastro" class="container hidden">
+    <h2>Inscrição</h2>
+
+    <input type="text" id="nome" placeholder="Nome completo">
+    <input type="email" id="email" placeholder="Email">
+    <input type="password" id="senha" placeholder="Senha">
+
+    <button class="btn" onclick="registrar()">Cadastrar</button>
+
+    <p class="signup">Já tem conta? <a onclick="mostrarLogin()">Entrar</a></p>
+    <p class="lang">🌐 Português (Brasil)</p>
+  </div>
+
+  <!-- ÁREA PÓS LOGIN -->
+  <div id="areaLogada" class="container hidden">
+    <h2>Bem-vindo 🎉</h2>
+    <p id="bemVindo"></p>
+    <button class="btn" onclick="logout()">🚪 Sair</button>
+  </div>
+
+  <script>
+    function mostrarCadastro() {
+      document.getElementById("login").classList.add("hidden");
+      document.getElementById("cadastro").classList.remove("hidden");
+    }
+
+    function mostrarLogin() {
+      document.getElementById("cadastro").classList.add("hidden");
+      document.getElementById("login").classList.remove("hidden");
+    }
+
+    function registrar() {
+      const nome = document.getElementById("nome").value;
+      const email = document.getElementById("email").value;
+      const senha = document.getElementById("senha").value;
+
+      if (!nome || !email || !senha) {
+        alert("⚠️ Preencha todos os campos!");
+        return;
+      }
+
+      localStorage.setItem("usuario", JSON.stringify({ nome, email, senha }));
+      alert("✅ Cadastro realizado com sucesso!");
+      mostrarLogin();
+    }
+
+    function entrar() {
+      const email = document.getElementById("loginEmail").value;
+      const senha = document.getElementById("loginSenha").value;
+
+      const usuario = JSON.parse(localStorage.getItem("usuario"));
+
+      if (usuario && usuario.email === email && usuario.senha === senha) {
+        document.getElementById("login").classList.add("hidden");
+        document.getElementById("areaLogada").classList.remove("hidden");
+        document.getElementById("bemVindo").innerText = "Olá, " + usuario.nome + "!";
+      } else {
+        alert("❌ E-mail ou senha incorretos!");
+      }
+    }
+
+    function logout() {
+      document.getElementById("areaLogada").classList.add("hidden");
+      mostrarLogin();
+    }
+  </script>
 </body>
 </html>
