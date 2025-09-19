@@ -3,177 +3,80 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>LS Ai Studio - Sistema Completo e Corrigido</title>
+  <title>LS Ai Studio - Teste de Autenticação</title>
   <style>
     body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: linear-gradient(135deg, #1a1a2e, #16213e);
+      font-family: Arial, sans-serif;
+      background: #121212;
       color: white;
       text-align: center;
       padding: 20px;
-      margin: 0;
     }
     .container {
-      max-width: 500px;
-      margin: 40px auto;
-      background: rgba(255,255,255,0.05);
+      max-width: 400px;
+      margin: auto;
+      background: rgba(0,0,0,0.7);
       padding: 30px;
-      border-radius: 20px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+      border-radius: 15px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.5);
     }
     input {
       width: 100%;
-      padding: 14px;
-      margin: 12px 0;
-      border-radius: 10px;
+      padding: 12px;
+      margin: 10px 0;
+      border-radius: 8px;
       border: none;
       outline: none;
       background: rgba(255,255,255,0.1);
       color: white;
-      font-size: 16px;
     }
     button {
       width: 100%;
-      padding: 14px;
-      margin: 12px 0;
+      padding: 12px;
+      margin: 10px 0;
       border: none;
-      border-radius: 10px;
+      border-radius: 8px;
       cursor: pointer;
       font-size: 16px;
-      font-weight: bold;
-      transition: all 0.3s ease;
+      transition: all 0.3s;
     }
-    .btn-primary { background: #7b2ff7; }
-    .btn-primary:hover { background: #5b00b5; }
+    .btn-login { background: #7b2ff7; }
+    .btn-login:hover { background: #5b00b5; }
+    .btn-register { background: #5b00b5; }
+    .btn-register:hover { background: #3a007f; }
     .btn-google { background: #4285F4; }
     .btn-google:hover { background: #3367D6; }
-    .btn-pix { background: #00cc66; }
-    .btn-pix:hover { background: #00aa44; }
-    .btn-logout { background: #ff3366; }
-    .btn-logout:hover { background: #cc0033; }
     #status {
       background: #000;
       color: lime;
-      padding: 15px;
-      border-radius: 10px;
+      padding: 10px;
+      border-radius: 8px;
       margin-top: 20px;
       font-family: monospace;
-      min-height: 20px;
-    }
-    #form-dashboard, #pix, #perfil {
-      text-align: left;
-      padding: 20px;
-      background: rgba(0,0,0,0.1);
-      border-radius: 15px;
-      margin-top: 20px;
-    }
-    #pix-key, #pix-key-2 {
-      margin-top: 15px;
-      padding: 15px;
-      background: #000;
-      color: lime;
-      border-radius: 8px;
-      font-family: monospace;
-      display: none;
-    }
-    .links {
-      margin: 20px 0;
-      display: flex;
-      gap: 15px;
-      justify-content: center;
-      flex-wrap: wrap;
-    }
-    .links a {
-      color: #ff3366;
-      text-decoration: none;
-      padding: 8px 16px;
-      border-radius: 8px;
-      background: rgba(255,51,102,0.1);
-      transition: all 0.3s;
-    }
-    .links a:hover {
-      background: rgba(255,51,102,0.2);
-    }
-    h3, h4 {
-      margin: 15px 0 10px;
-      color: #7b2ff7;
-    }
-    ul {
-      padding-left: 20px;
-      text-align: left;
-    }
-    li {
-      margin: 5px 0;
     }
   </style>
 </head>
 <body>
 
   <div class="container">
-    <!-- FORMULÁRIO DE LOGIN -->
-    <div id="form-login">
-      <h2>🔐 LS Ai Studio</h2>
-      <input type="email" id="email" placeholder="Seu email" required>
-      <input type="password" id="senha" placeholder="Sua senha" required>
-      <button class="btn-primary" onclick="login()">Entrar</button>
-      <button class="btn-primary" onclick="registrar()">Criar Conta</button>
-      <button class="btn-google" onclick="loginGoogle()">Entrar com Google</button>
-    </div>
-
-    <!-- PAINEL DE CONTROLE -->
-    <div id="form-dashboard" style="display:none;">
-      <h3>🎉 Bem-vindo!</h3>
-      <p id="user-email">carregando...</p>
-
-      <!-- DASHBOARD CONTENT -->
-      <div id="dashboard-content">
-        <h4>📈 Seu Painel</h4>
-        <p><strong>Plano:</strong> <span id="user-plan">Gratuito</span></p>
-        <p><strong>Último acesso:</strong> <span id="last-login">carregando...</span></p>
-        <button class="btn-pix" onclick="gerarChavePix()">🔑 Gerar Chave Pix</button>
-        <div id="pix-key"></div>
-        
-        <h4>📋 Histórico de Acesso</h4>
-        <ul id="historico">
-          <li>Acesso em 10/06/2025</li>
-          <li>Acesso em 09/06/2025</li>
-        </ul>
-      </div>
-
-      <!-- NAVEGAÇÃO -->
-      <div class="links">
-        <a href="#" onclick="mostrarSecao('pix'); return false;">💳 Meu Pix</a>
-        <a href="#" onclick="mostrarSecao('perfil'); return false;">👤 Meu Perfil</a>
-      </div>
-
-      <!-- SEÇÕES ADICIONAIS -->
-      <div id="pix" style="display:none;">
-        <h4>💳 Área do Pix</h4>
-        <p>Aqui você gerencia seus pagamentos e chaves Pix.</p>
-        <button class="btn-pix" onclick="gerarChavePix()">🔄 Gerar Nova Chave</button>
-        <div id="pix-key-2"></div>
-      </div>
-
-      <div id="perfil" style="display:none;">
-        <h4>👤 Meu Perfil</h4>
-        <p><strong>Email:</strong> <span id="user-email-perfil">carregando...</span></p>
-        <p><strong>Plano Atual:</strong> Gratuito</p>
-        <p><strong>Membro desde:</strong> 10/06/2025</p>
-        <button onclick="alert('Edição de perfil em breve!')">✏️ Editar Perfil</button>
-      </div>
-
-      <button class="btn-logout" onclick="logout()">Sair</button>
-    </div>
-
+    <h2>🔒 LS Ai Studio</h2>
+    <input type="email" id="email" placeholder="Seu email" required>
+    <input type="password" id="senha" placeholder="Sua senha" required>
+    
+    <button class="btn-login" onclick="login()">Entrar</button>
+    <button class="btn-register" onclick="registrar()">Criar Conta</button>
+    <button class="btn-google" onclick="loginGoogle()">Entrar com Google</button>
+    
     <div id="status">Pronto para começar. Faça login ou crie sua conta.</div>
   </div>
 
+  <!-- ✅ IMPORTANTE: SCRIPT NO FINAL DO BODY -->
   <script type="module">
-    // ✅ IMPORTS — Via CDN, sem instalar nada
+    // ✅ IMPORTS VIA CDN — SEM INSTALAR NADA
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-    import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+    import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
-    // ✅ CONFIGURAÇÃO DO FIREBASE — Copiada diretamente do console
+    // ✅ CONFIGURAÇÃO DO FIREBASE — SEU PROJETO REAL
     const firebaseConfig = {
       apiKey: "AIzaSyCLWvDtXZuGwhME9FxvXFcs9Ir2YkNVRBg",
       authDomain: "ls-ai-studio-64ecf.firebaseapp.com",
@@ -184,79 +87,47 @@
       measurementId: "G-VSLCSZ0Y5Q"
     };
 
-    // ✅ INICIALIZAÇÃO — OBRIGATÓRIO
+    // ✅ INICIALIZAÇÃO
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
 
-    // ✅ MONITORA AUTENTICAÇÃO — Atualiza UI automaticamente
-    onAuthStateChanged(auth, (user) => {
-      if (user) {
-        // Mostra dashboard
-        document.getElementById("form-login").style.display = "none";
-        document.getElementById("form-dashboard").style.display = "block";
-        document.getElementById("user-email").innerText = user.email;
-        document.getElementById("user-email-perfil").innerText = user.email;
-        document.getElementById("last-login").innerText = new Date().toLocaleString('pt-BR');
-        document.getElementById("status").innerHTML = "✅ Logado com sucesso!";
-      } else {
-        // Mostra login
-        document.getElementById("form-login").style.display = "block";
-        document.getElementById("form-dashboard").style.display = "none";
-        document.getElementById("status").innerHTML = "🔴 Faça login para acessar seu painel.";
+    // ✅ FUNÇÕES DE TESTE
+    async function login() {
+      const email = document.getElementById("email").value;
+      const senha = document.getElementById("senha").value;
+      const status = document.getElementById("status");
+      
+      try {
+        await signInWithEmailAndPassword(auth, email, senha);
+        status.innerHTML = "✅ Login realizado com sucesso!";
+      } catch (error) {
+        status.innerHTML = `❌ Erro: ${error.message}`;
       }
-    });
-
-    // ✅ FUNÇÕES PRINCIPAIS
-
-  async function registrar() {
-  const email = document.getElementById("email").value;
-  const senha = document.getElementById("senha").value;
-  const status = document.getElementById("status");
-
-  if (!email || !senha) {
-    status.innerHTML = "❌ Preencha email e senha!";
-    return;
-  }
-
-  status.innerHTML = "⏳ Criando sua conta...";
-
-  try {
-    // 👇 Cria o usuário no Firebase
-    const userCredential = await createUserWithEmailAndPassword(auth, email, senha);
-
-    // 👇 Confirma que o usuário foi criado
-    if (userCredential.user) {
-      status.innerHTML = "✅ Conta criada com sucesso! Bem-vindo(a)!";
-      
-      // 👇 Atualiza o email exibido no painel
-      document.getElementById("user-email").innerText = userCredential.user.email;
-      document.getElementById("user-email-perfil").innerText = userCredential.user.email;
-      document.getElementById("last-login").innerText = new Date().toLocaleString('pt-BR');
-      
-      // 👇 Só AGORA mostra o painel
-      document.getElementById("form-login").style.display = "none";
-      document.getElementById("form-dashboard").style.display = "block";
-      
-      // Limpa campos
-      document.getElementById("email").value = "";
-      document.getElementById("senha").value = "";
-    } else {
-      throw new Error("Usuário não foi criado.");
     }
 
-  } catch (error) {
-    console.error("Erro ao registrar:", error);
-    
-    let mensagem = "❌ Erro ao criar conta.";
-    
-    if (error.code === "auth/email-already-in-use") {
-      mensagem = "📧 Este email já está em uso. Tente fazer login.";
-    } else if (error.code === "auth/invalid-email") {
-      mensagem = "📧 Email inválido. Verifique e tente novamente.";
-    } else if (error.code === "auth/weak-password") {
-      mensagem = "🔐 Senha fraca. Use pelo menos 6 caracteres.";
+    async function registrar() {
+      const email = document.getElementById("email").value;
+      const senha = document.getElementById("senha").value;
+      const status = document.getElementById("status");
+      
+      try {
+        await createUserWithEmailAndPassword(auth, email, senha);
+        status.innerHTML = "✅ Conta criada com sucesso!";
+      } catch (error) {
+        status.innerHTML = `❌ Erro: ${error.message}`;
+      }
     }
-    
-    status.innerHTML = mensagem;
-  }
-}
+
+    async function loginGoogle() {
+      const provider = new GoogleAuthProvider();
+      try {
+        await signInWithPopup(auth, provider);
+        document.getElementById("status").innerHTML = "✅ Logado com Google!";
+      } catch (error) {
+        document.getElementById("status").innerHTML = `❌ Erro Google: ${error.message}`;
+      }
+    }
+  </script>
+
+</body>
+</html>
