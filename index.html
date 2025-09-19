@@ -1,154 +1,23 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login - Ls AI Studio</title>
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: Arial, sans-serif;
-    }
+<!-- Firebase App (base) -->
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js"></script>
+<!-- Firebase Auth -->
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js"></script>
+<!-- Firebase Analytics (opcional) -->
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-analytics.js"></script>
 
-    body {
-      height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      background: linear-gradient(180deg, #0d001a, #1a0033, #330066);
-      color: #fff;
-    }
+<script>
+  // Sua configuração do Firebase
+  const firebaseConfig = {
+    apiKey: "AIzaSyDLS7olhgNbw1G8GvhvbIqzpyn354ToaXo",
+    authDomain: "ls-ai-studio.firebaseapp.com",
+    projectId: "ls-ai-studio",
+    storageBucket: "ls-ai-studio.firebasestorage.app",
+    messagingSenderId: "1043836101947",
+    appId: "1:1043836101947:web:0e60c440f08cbb9c57031e",
+    measurementId: "G-SD09LQC63C"
+  };
 
-    .login-container {
-      background: #1c1c1c;
-      padding: 2rem;
-      border-radius: 12px;
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6);
-      width: 100%;
-      max-width: 400px;
-      text-align: center;
-    }
-
-    h2 {
-      margin-bottom: 1.5rem;
-      font-size: 1.5rem;
-    }
-
-    .social-login {
-      display: flex;
-      justify-content: space-between;
-      margin-bottom: 1rem;
-    }
-
-    .social-login button {
-      flex: 1;
-      margin: 0 0.3rem;
-      padding: 0.8rem;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      font-weight: bold;
-      transition: 0.3s;
-    }
-
-    .google {
-      background: #fff;
-      color: #000;
-    }
-
-    .apple {
-      background: #000;
-      color: #fff;
-    }
-
-    input {
-      width: 100%;
-      padding: 0.8rem;
-      margin: 0.5rem 0;
-      border: none;
-      border-radius: 8px;
-    }
-
-    .checkbox-container {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-size: 0.9rem;
-      margin-bottom: 1rem;
-    }
-
-    .btn {
-      width: 100%;
-      padding: 0.9rem;
-      border: none;
-      border-radius: 8px;
-      background: #a64dff;
-      color: #fff;
-      font-size: 1rem;
-      cursor: pointer;
-      font-weight: bold;
-      transition: 0.3s;
-    }
-
-    .btn:hover {
-      background: #8a2be2;
-    }
-
-    .register {
-      margin-top: 1rem;
-      font-size: 0.9rem;
-    }
-
-    .register a {
-      color: #a64dff;
-      text-decoration: none;
-      font-weight: bold;
-    }
-
-    .language {
-      margin-top: 1rem;
-      font-size: 0.8rem;
-      opacity: 0.7;
-    }
-  </style>
-</head>
-<body>
-  <div class="login-container">
-    <h2>Entrar</h2>
-
-    <div class="social-login">
-      <button class="google">Google</button>
-      <button class="apple">Maçã</button>
-    </div>
-
-    <form id="loginForm">
-      <input type="email" id="email" placeholder="Email" required>
-      <input type="password" id="password" placeholder="Senha" required>
-      
-      <div class="checkbox-container">
-        <label><input type="checkbox"> Lembre-se de mim</label>
-        <a href="#">Esqueceu a senha?</a>
-      </div>
-
-      <button type="submit" class="btn">Entrar</button>
-    </form>
-
-    <div class="register">
-      Ainda não está registrado? <a href="#">Inscrição</a>
-    </div>
-
-    <div class="language">🌐 Português (BR)</div>
-  </div>
-
-  <script>
-    document.getElementById("loginForm").addEventListener("submit", function(e) {
-      e.preventDefault();
-      
-      // aqui você pode validar o email/senha se quiser
-      window.location.href = "https://loritosfilmhub.github.io/Ls-Ai-Studio-0.0.2/";
-    });
-  </script>
-</body>
-</html>
+  // Inicializa o Firebase
+  const app = firebase.initializeApp(firebaseConfig);
+  const analytics = firebase.analytics(app); // opcional
+</script>
