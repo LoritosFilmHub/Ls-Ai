@@ -3,222 +3,152 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>LS Ai Studio - Login & Cadastro</title>
+  <title>Login - Ls AI Studio</title>
   <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Arial, sans-serif;
+    }
+
     body {
-      font-family: "Poppins", Arial, sans-serif;
-      background: linear-gradient(180deg, #000000, #2c003e, #6a1b9a);
-      color: white;
+      height: 100vh;
       display: flex;
       justify-content: center;
       align-items: center;
-      height: 100vh;
-      margin: 0;
+      background: linear-gradient(180deg, #0d001a, #1a0033, #330066);
+      color: #fff;
     }
 
-    .container {
-      background: rgba(0, 0, 0, 0.7);
-      padding: 40px;
-      border-radius: 20px;
-      box-shadow: 0 0 20px rgba(0,0,0,0.6);
-      width: 350px;
+    .login-container {
+      background: #1c1c1c;
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6);
+      width: 100%;
+      max-width: 400px;
       text-align: center;
-      animation: fadeIn 0.5s ease-in-out;
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
     }
 
     h2 {
-      margin-bottom: 20px;
-      font-weight: 600;
+      margin-bottom: 1.5rem;
+      font-size: 1.5rem;
     }
 
-    .social-btn {
+    .social-login {
       display: flex;
       justify-content: space-between;
-      gap: 10px;
-      margin-bottom: 20px;
+      margin-bottom: 1rem;
     }
 
-    .btn-social {
+    .social-login button {
       flex: 1;
-      background: transparent;
-      border: 1px solid #9b59b6;
-      color: white;
-      padding: 10px;
+      margin: 0 0.3rem;
+      padding: 0.8rem;
+      border: none;
       border-radius: 8px;
       cursor: pointer;
+      font-weight: bold;
       transition: 0.3s;
     }
 
-    .btn-social:hover {
-      background: #9b59b6;
+    .google {
+      background: #fff;
+      color: #000;
+    }
+
+    .apple {
+      background: #000;
+      color: #fff;
     }
 
     input {
       width: 100%;
-      padding: 12px;
-      margin: 10px 0;
+      padding: 0.8rem;
+      margin: 0.5rem 0;
       border: none;
       border-radius: 8px;
-      background: #1a1a1a;
-      color: white;
-      font-size: 14px;
     }
 
-    input:focus {
-      outline: 2px solid #9b59b6;
-    }
-
-    .options {
+    .checkbox-container {
       display: flex;
       justify-content: space-between;
-      font-size: 12px;
-      margin: 10px 0;
-      color: #bbb;
-    }
-
-    .options a {
-      color: #9b59b6;
-      text-decoration: none;
+      align-items: center;
+      font-size: 0.9rem;
+      margin-bottom: 1rem;
     }
 
     .btn {
       width: 100%;
-      padding: 12px;
-      margin-top: 15px;
+      padding: 0.9rem;
       border: none;
       border-radius: 8px;
-      background: #9b59b6;
-      color: white;
-      font-weight: bold;
-      font-size: 16px;
+      background: #a64dff;
+      color: #fff;
+      font-size: 1rem;
       cursor: pointer;
+      font-weight: bold;
       transition: 0.3s;
     }
 
     .btn:hover {
-      background: #8e44ad;
+      background: #8a2be2;
     }
 
-    .signup {
-      margin-top: 15px;
-      font-size: 14px;
+    .register {
+      margin-top: 1rem;
+      font-size: 0.9rem;
     }
 
-    .signup a {
-      color: #9b59b6;
+    .register a {
+      color: #a64dff;
       text-decoration: none;
       font-weight: bold;
-      cursor: pointer;
     }
 
-    .lang {
-      margin-top: 15px;
-      font-size: 12px;
-      color: #aaa;
-    }
-
-    .hidden {
-      display: none;
+    .language {
+      margin-top: 1rem;
+      font-size: 0.8rem;
+      opacity: 0.7;
     }
   </style>
 </head>
 <body>
-  <!-- TELA DE LOGIN -->
-  <div id="login" class="container">
+  <div class="login-container">
     <h2>Entrar</h2>
 
-    <div class="social-btn">
-      <button class="btn-social">🔎 Google</button>
-      <button class="btn-social">🍏 Apple</button>
+    <div class="social-login">
+      <button class="google">Google</button>
+      <button class="apple">Maçã</button>
     </div>
 
-    <p>ou continuar com e-mail</p>
+    <form id="loginForm">
+      <input type="email" id="email" placeholder="Email" required>
+      <input type="password" id="password" placeholder="Senha" required>
+      
+      <div class="checkbox-container">
+        <label><input type="checkbox"> Lembre-se de mim</label>
+        <a href="#">Esqueceu a senha?</a>
+      </div>
 
-    <input type="email" id="loginEmail" placeholder="Email">
-    <input type="password" id="loginSenha" placeholder="Senha">
+      <button type="submit" class="btn">Entrar</button>
+    </form>
 
-    <div class="options">
-      <label><input type="checkbox"> Lembre-se de mim</label>
-      <a href="#">Esqueceu a senha?</a>
+    <div class="register">
+      Ainda não está registrado? <a href="#">Inscrição</a>
     </div>
 
-    <button class="btn" onclick="entrar()">Entrar</button>
-
-    <p class="signup">Ainda não está registrado? <a onclick="mostrarCadastro()">Inscrição</a></p>
-    <p class="lang">🌐 Português (Brasil)</p>
-  </div>
-
-  <!-- TELA DE CADASTRO -->
-  <div id="cadastro" class="container hidden">
-    <h2>Inscrição</h2>
-
-    <input type="text" id="nome" placeholder="Nome completo">
-    <input type="email" id="email" placeholder="Email">
-    <input type="password" id="senha" placeholder="Senha">
-
-    <button class="btn" onclick="registrar()">Cadastrar</button>
-
-    <p class="signup">Já tem conta? <a onclick="mostrarLogin()">Entrar</a></p>
-    <p class="lang">🌐 Português (Brasil)</p>
-  </div>
-
-  <!-- ÁREA PÓS LOGIN -->
-  <div id="areaLogada" class="container hidden">
-    <h2>Bem-vindo 🎉</h2>
-    <p id="bemVindo"></p>
-    <button class="btn" onclick="logout()">🚪 Sair</button>
+    <div class="language">🌐 Português (BR)</div>
   </div>
 
   <script>
-    function mostrarCadastro() {
-      document.getElementById("login").classList.add("hidden");
-      document.getElementById("cadastro").classList.remove("hidden");
-    }
-
-    function mostrarLogin() {
-      document.getElementById("cadastro").classList.add("hidden");
-      document.getElementById("login").classList.remove("hidden");
-    }
-
-    function registrar() {
-      const nome = document.getElementById("nome").value;
-      const email = document.getElementById("email").value;
-      const senha = document.getElementById("senha").value;
-
-      if (!nome || !email || !senha) {
-        alert("⚠️ Preencha todos os campos!");
-        return;
-      }
-
-      localStorage.setItem("usuario", JSON.stringify({ nome, email, senha }));
-      alert("✅ Cadastro realizado com sucesso!");
-      mostrarLogin();
-    }
-
-    function entrar() {
-      const email = document.getElementById("loginEmail").value;
-      const senha = document.getElementById("loginSenha").value;
-
-      const usuario = JSON.parse(localStorage.getItem("usuario"));
-
-      if (usuario && usuario.email === email && usuario.senha === senha) {
-        document.getElementById("login").classList.add("hidden");
-        document.getElementById("areaLogada").classList.remove("hidden");
-        document.getElementById("bemVindo").innerText = "Olá, " + usuario.nome + "!";
-      } else {
-        alert("❌ E-mail ou senha incorretos!");
-      }
-    }
-
-    function logout() {
-      document.getElementById("areaLogada").classList.add("hidden");
-      mostrarLogin();
-    }
+    document.getElementById("loginForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+      
+      // aqui você pode validar o email/senha se quiser
+      window.location.href = "https://loritosfilmhub.github.io/Ls-Ai-Studio-0.0.2/";
+    });
   </script>
 </body>
 </html>
