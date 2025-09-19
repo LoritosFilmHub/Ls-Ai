@@ -21,3 +21,122 @@
   const app = firebase.initializeApp(firebaseConfig);
   const analytics = firebase.analytics(app); // opcional
 </script>
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login - Ls AI Studio</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: Arial, sans-serif; }
+    body {
+      height: 100vh; display: flex; justify-content: center; align-items: center;
+      background: linear-gradient(180deg, #0d001a, #1a0033, #330066); color: #fff;
+    }
+    .container {
+      background: #1c1c1c; padding: 2rem; border-radius: 12px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6);
+      width: 100%; max-width: 400px; text-align: center;
+    }
+    h2 { margin-bottom: 1.5rem; font-size: 1.5rem; }
+    input {
+      width: 100%; padding: 0.8rem; margin: 0.5rem 0;
+      border: none; border-radius: 8px;
+    }
+    .btn {
+      width: 100%; padding: 0.9rem; border: none; border-radius: 8px;
+      background: #a64dff; color: #fff; font-size: 1rem;
+      cursor: pointer; font-weight: bold; transition: 0.3s;
+    }
+    .btn:hover { background: #8a2be2; }
+    .switch { margin-top: 1rem; font-size: 0.9rem; }
+    .switch a { color: #a64dff; text-decoration: none; font-weight: bold; }
+    #logoutBtn { margin-top: 1rem; background: crimson; display: none; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2 id="formTitle">Entrar</h2>
+
+    <form id="authForm">
+      <input type="email" id="email" placeholder="Email" required>
+      <input type="password" id="password" placeholder="Senha" required>
+      <button type="submit" class="btn" id="submitBtn">Entrar</button>
+    </form>
+
+    <button id="logoutBtn" class="btn">Sair</button>
+
+    <div class="switch">
+      <span id="toggleText">Ainda não tem conta?</span>
+      <a href="#" id="toggleLink">Registrar</a>
+    </div>
+  </div>
+
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
+
+  <script>
+    // 🔑 Cole aqui seu firebaseConfig
+    const firebaseConfig = {
+      apiKey: "SUA_API_KEY",
+      authDomain: "SEU_PROJETO.firebaseapp.com",
+      projectId: "SEU_PROJETO",
+      storageBucket: "SEU_PROJETO.appspot.com",
+      messagingSenderId: "123456789",
+      appId: "1:123456789:web:abcdefg12345"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+
+    let isLogin = true; // alterna entre login e registro
+
+    document.getElementById("authForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value.trim();
+
+      try {
+        if (isLogin) {
+          await auth.signInWithEmailAndPassword(email, password);
+        } else {
+          await auth.createUserWithEmailAndPassword(email, password);
+        }
+      } catch (err) {
+        alert("Erro: " + err.message);
+      }
+    });
+
+    // Alternar entre login e registro
+    document.getElementById("toggleLink").addEventListener("click", (e) => {
+      e.preventDefault();
+      isLogin = !isLogin;
+      document.getElementById("formTitle").innerText = isLogin ? "Entrar" : "Registrar";
+      document.getElementById("submitBtn").innerText = isLogin ? "Entrar" : "Registrar";
+      document.getElementById("toggleText").innerText = isLogin ? "Ainda não tem conta?" : "Já tem conta?";
+      document.getElementById("toggleLink").innerText = isLogin ? "Registrar" : "Entrar";
+    });
+
+    // Monitorar login
+    auth.onAuthStateChanged((user) => {
+      if (user) {
+        console.log("Usuário logado:", user.email);
+        document.getElementById("logoutBtn").style.display = "block";
+        // 🔗 Aqui vai o redirecionamento para sua plataforma
+        window.location.href = "https://loritosfilmhub.github.io/Ls-Ai-Studio-0.0.2/";
+      } else {
+        console.log("Usuário deslogado");
+        document.getElementById("logoutBtn").style.display = "none";
+      }
+    });
+
+    // Logout
+    document.getElementById("logoutBtn").addEventListener("click", async () => {
+      await auth.signOut();
+      window.location.href = "/";
+    });
+  </script>
+</body>
+</html>
+
