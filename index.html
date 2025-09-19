@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pagamento Pix - LS Ai Studio</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="pix-container">
+    <h2>Pagamento via Pix</h2>
+    <p>Escolha um valor para gerar o QR Code:</p>
+
+    <!-- Botões de valores -->
+    <div class="valores">
+      <button class="valor-btn" onclick="gerarPix(10)">R$ 10</button>
+      <button class="valor-btn" onclick="gerarPix(20)">R$ 20</button>
+      <button class="valor-btn" onclick="gerarPix(30)">R$ 30</button>
+    </div>
+
+    <!-- QR Code -->
+    <img id="qrcode" src="assets/qrcode-pix.png" alt="QR Code Pix">
+
+    <!-- Chave Pix -->
+    <div class="pix-texto">
+      <strong>Chave Pix:</strong><br>
+      <span id="pix-chave">1c814ae7-453e-470d-a9b4-9b26f1589d1a</span><br><br>
+      <strong>E-mail:</strong><br>
+      <span>loritos.videoshort.ai@gmail.com</span>
+    </div>
+
+    <!-- Botão copiar -->
+    <button class="valor-btn" onclick="copiarPix()">📋 Copiar Chave Pix</button>
+
+    <p class="rodape">LS Ai Studio © 2025</p>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
