@@ -2,19 +2,29 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <title>Teste Firebase Auth</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LS Ai Studio - Firebase Test</title>
+  <style>
+    body { font-family: Arial, sans-serif; background: #0f0f23; color: white; text-align: center; padding: 20px; }
+    #debug { background: #000; color: lime; padding: 15px; border-radius: 8px; margin-top: 20px; font-family: monospace; text-align: left; max-height: 300px; overflow-y: auto; }
+    button { background: #7b2ff7; color: white; padding: 14px 24px; border: none; border-radius: 12px; cursor: pointer; margin: 20px 0; font-size: 18px; font-weight: bold; }
+    button:hover { background: #5b00b5; }
+    h2 { color: #ff3366; }
+  </style>
 </head>
 <body>
 
-  <div id="debug">Aguardando ação...</div>
-  <button onclick="testarFirebase()">Testar Firebase</button>
+  <h2>🚀 Teste Firebase Auth — GitHub Pages</h2>
+  <p>Clique no botão abaixo para criar um usuário de teste.</p>
+  <button onclick="testarFirebase()">💥 TESTAR FIREBASE AGORA</button>
+  <div id="debug">🟢 Sistema pronto. Clique no botão acima para iniciar.</div>
 
   <script type="module">
-    // ✅ IMPORTS
+    // ✅ IMPORTANDO SDKs DO FIREBASE VIA CDN — SEM NPM, SEM INSTALAÇÃO!
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
     import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
-    // ✅ CONFIG
+    // ✅ SUA CONFIG DO FIREBASE
     const firebaseConfig = {
       apiKey: "AIzaSyCLWvDtXZuGwhME9FxvXFcs9Ir2YkNVRBg",
       authDomain: "ls-ai-studio-64ecf.firebaseapp.com",
@@ -25,11 +35,11 @@
       measurementId: "G-VSLCSZ0Y5Q"
     };
 
-    // ✅ INICIALIZAÇÃO
+    // ✅ INICIALIZA FIREBASE
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
 
-    // ✅ 👇👇👇 COLOQUE A FUNÇÃO AQUI, DENTRO DO <testarFirebase()> 👇👇👇
+    // ✅ FUNÇÃO DE TESTE
     async function testarFirebase() {
       const debug = document.getElementById("debug");
       debug.innerHTML = "🔧 Iniciando teste...<br>";
@@ -40,26 +50,29 @@
         const senha = `SenhaFort3!${timestamp}`;
 
         debug.innerHTML += `📧 Email: ${email}<br>`;
-        debug.innerHTML += `🔒 Tentando criar usuário...<br>`;
+        debug.innerHTML += `🔒 Criando usuário...<br>`;
 
         const userCredential = await createUserWithEmailAndPassword(auth, email, senha);
 
-        debug.innerHTML += `✅ SUCESSO!<br>`;
+        debug.innerHTML += `✅ <strong>SUCESSO!</strong><br>`;
         debug.innerHTML += `🆔 UID: ${userCredential.user.uid}<br>`;
         debug.innerHTML += `✉️ Email: ${userCredential.user.email}<br>`;
-        debug.innerHTML += `🎉 TUDO ESTÁ FUNCIONANDO PERFEITAMENTE.<br>`;
+        debug.innerHTML += `🎉 <strong>FUNCIONANDO NO GITHUB PAGES!</strong><br>`;
+
+        console.log("✅ Usuário criado:", userCredential.user);
+
       } catch (error) {
-        debug.innerHTML += `❌ FALHOU!<br>`;
-        debug.innerHTML += `📛 Código: <strong>${error.code}</strong><br>`;
+        debug.innerHTML += `❌ <strong>ERRO:</strong><br>`;
+        debug.innerHTML += `📛 Código: ${error.code}<br>`;
         debug.innerHTML += `💬 Mensagem: ${error.message}<br>`;
-        debug.innerHTML += `🚨 COPIE ESSA MENSAGEM E MANDE PRA MIM.<br>`;
+        console.error("Erro:", error);
       }
     }
 
     // ✅ EXPÕE A FUNÇÃO PARA O BOTÃO
     window.testarFirebase = testarFirebase;
 
-  </scriptte>
+  </script>
 
 </body>
 </html>
