@@ -3,85 +3,107 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login - Ls AI Studio</title>
+  <title>Lorito's AI Studio - Login</title>
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; font-family: Arial, sans-serif; }
     body {
-      height: 100vh; display: flex; justify-content: center; align-items: center;
-      background: linear-gradient(180deg, #0d001a, #1a0033, #330066); color: #fff;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #1a0033, #330066);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      color: #fff;
     }
     .container {
-      background: #1c1c1c; padding: 2rem; border-radius: 12px;
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6);
-      width: 100%; max-width: 400px; text-align: center;
+      background: #1c1c1c;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+      width: 320px;
+      text-align: center;
     }
-    h2 { margin-bottom: 1.5rem; font-size: 1.5rem; }
+    h2 {
+      margin-bottom: 20px;
+    }
     input {
-      width: 100%; padding: 0.8rem; margin: 0.5rem 0;
-      border: none; border-radius: 8px;
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      border: none;
+      border-radius: 8px;
     }
-    .btn {
-      width: 100%; padding: 0.9rem; border: none; border-radius: 8px;
-      background: #a64dff; color: #fff; font-size: 1rem;
-      cursor: pointer; font-weight: bold; transition: 0.3s;
+    button {
+      width: 100%;
+      padding: 12px;
+      background: #a855f7;
+      border: none;
+      border-radius: 8px;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
     }
-    .btn:hover { background: #8a2be2; }
-    .switch { margin-top: 1rem; font-size: 0.9rem; }
-    .switch a { color: #a64dff; text-decoration: none; font-weight: bold; }
-    #logoutBtn { margin-top: 1rem; background: crimson; display: none; }
+    button:hover {
+      background: #9333ea;
+    }
+    .toggle {
+      margin-top: 15px;
+      font-size: 14px;
+    }
+    .toggle a {
+      color: #a855f7;
+      cursor: pointer;
+      text-decoration: none;
+    }
   </style>
 </head>
 <body>
   <div class="container">
     <h2 id="formTitle">Entrar</h2>
-
     <form id="authForm">
-      <input type="email" id="email" placeholder="Email" required autocomplete="off">
-      <input type="password" id="password" placeholder="Senha" required autocomplete="off">
-      <button type="submit" class="btn" id="submitBtn">Entrar</button>
+      <input type="email" id="email" placeholder="Email" required />
+      <input type="password" id="password" placeholder="Senha" required />
+      <button type="submit" id="submitBtn">Entrar</button>
     </form>
-
-    <button id="logoutBtn" class="btn">Sair</button>
-
-    <div class="switch">
+    <div class="toggle">
       <span id="toggleText">Ainda não tem conta?</span>
-      <a href="#" id="toggleLink">Registrar</a>
+      <a id="toggleLink">Registrar</a>
     </div>
+    <button id="logoutBtn" style="display:none; margin-top:10px;">Sair</button>
   </div>
 
-  <!-- Firebase Modular -->
+  <!-- Firebase App + Auth -->
   <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
     import { 
       getAuth, 
       signInWithEmailAndPassword, 
       createUserWithEmailAndPassword, 
-      onAuthStateChanged, 
-      signOut 
-    } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+      signOut,
+      onAuthStateChanged 
+    } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
 
     // Configuração Firebase
     const firebaseConfig = {
       apiKey: "AIzaSyDKPoHfjTHnfwrZmqewtM6lTsDAA9tGIO4",
       authDomain: "ls-ai-studio-ee7b5.firebaseapp.com",
       projectId: "ls-ai-studio-ee7b5",
-      storageBucket: "ls-ai-studio-ee7b5.firebasestorage.app",
+      storageBucket: "ls-ai-studio-ee7b5.appspot.com",
       messagingSenderId: "900119249794",
       appId: "1:900119249794:web:b45ce25dce982e2bacc59b"
     };
 
-    // Inicializa Firebase
+    // Inicializar Firebase
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
 
     let isLogin = true;
 
-    // Envio do formulário
+    // Formulário de Login/Registro
     document.getElementById("authForm").addEventListener("submit", async (e) => {
       e.preventDefault();
       const email = document.getElementById("email").value.trim();
       const password = document.getElementById("password").value.trim();
-
       try {
         if (isLogin) {
           await signInWithEmailAndPassword(auth, email, password);
@@ -89,11 +111,11 @@
           await createUserWithEmailAndPassword(auth, email, password);
         }
       } catch (err) {
-        alert("⚠️ Erro: " + err.message.replace("Firebase:", "").trim());
+        alert("⚠️ Erro: " + err.message);
       }
     });
 
-    // Alternar entre login e registro
+    // Alternar Login/Registro
     document.getElementById("toggleLink").addEventListener("click", (e) => {
       e.preventDefault();
       isLogin = !isLogin;
@@ -103,13 +125,15 @@
       document.getElementById("toggleLink").innerText = isLogin ? "Registrar" : "Entrar";
     });
 
-    // Monitorar login
+    // Monitorar estado de autenticação
     onAuthStateChanged(auth, (user) => {
       if (user) {
         console.log("Usuário logado:", user.email);
         document.getElementById("logoutBtn").style.display = "block";
-        // 🔗 Redirecionar após login
-        window.location.href = "https://SEU_USUARIO.github.io/Ls-Ai-Studio/"; 
+        // Redireciona só se não estiver já na página inicial
+        if (!window.location.href.includes("index.html")) {
+          window.location.href = "index.html";
+        }
       } else {
         console.log("Usuário deslogado");
         document.getElementById("logoutBtn").style.display = "none";
@@ -119,7 +143,6 @@
     // Logout
     document.getElementById("logoutBtn").addEventListener("click", async () => {
       await signOut(auth);
-      window.location.href = "index.html"; // volta para a tela de login
     });
   </script>
 </body>
