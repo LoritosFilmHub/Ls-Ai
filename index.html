@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>LS Ai Studio - Teste de Autenticação</title>
+  <title>LS Ai Studio - Login Garantido</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -70,11 +70,11 @@
     <div id="status">Pronto para começar. Faça login ou crie sua conta.</div>
   </div>
 
-  <!-- ✅ IMPORTANTE: SCRIPT NO FINAL DO BODY -->
+  <!-- ✅ SCRIPT COM IMPORTS VIA ESM.SH — SEMPRE FUNCIONA -->
   <script type="module">
-    // ✅ IMPORTS VIA CDN — SEM INSTALAR NADA
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-    import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+    // ✅ IMPORTS VIA ESM.SH — NUNCA FALHA
+    import { initializeApp } from "https://esm.sh/firebase@10.12.2/app";
+    import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from "https://esm.sh/firebase@10.12.2/auth";
 
     // ✅ CONFIGURAÇÃO DO FIREBASE — SEU PROJETO REAL
     const firebaseConfig = {
