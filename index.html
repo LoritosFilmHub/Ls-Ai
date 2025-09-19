@@ -1,26 +1,3 @@
-<!-- Firebase App (base) -->
-<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js"></script>
-<!-- Firebase Auth -->
-<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js"></script>
-<!-- Firebase Analytics (opcional) -->
-<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-analytics.js"></script>
-
-<script>
-  // Sua configuração do Firebase
-  const firebaseConfig = {
-    apiKey: "AIzaSyDLS7olhgNbw1G8GvhvbIqzpyn354ToaXo",
-    authDomain: "ls-ai-studio.firebaseapp.com",
-    projectId: "ls-ai-studio",
-    storageBucket: "ls-ai-studio.firebasestorage.app",
-    messagingSenderId: "1043836101947",
-    appId: "1:1043836101947:web:0e60c440f08cbb9c57031e",
-    measurementId: "G-SD09LQC63C"
-  };
-
-  // Inicializa o Firebase
-  const app = firebase.initializeApp(firebaseConfig);
-  const analytics = firebase.analytics(app); // opcional
-</script>
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -59,8 +36,8 @@
     <h2 id="formTitle">Entrar</h2>
 
     <form id="authForm">
-      <input type="email" id="email" placeholder="Email" required>
-      <input type="password" id="password" placeholder="Senha" required>
+      <input type="email" id="email" placeholder="Email" required autocomplete="off">
+      <input type="password" id="password" placeholder="Senha" required autocomplete="off">
       <button type="submit" class="btn" id="submitBtn">Entrar</button>
     </form>
 
@@ -77,7 +54,7 @@
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
 
   <script>
-    // 🔑 Cole aqui seu firebaseConfig
+    // 🔑 Configuração do Firebase
     const firebaseConfig = {
       apiKey: "SUA_API_KEY",
       authDomain: "SEU_PROJETO.firebaseapp.com",
@@ -90,8 +67,9 @@
     firebase.initializeApp(firebaseConfig);
     const auth = firebase.auth();
 
-    let isLogin = true; // alterna entre login e registro
+    let isLogin = true;
 
+    // Envio do formulário
     document.getElementById("authForm").addEventListener("submit", async (e) => {
       e.preventDefault();
       const email = document.getElementById("email").value.trim();
@@ -104,7 +82,7 @@
           await auth.createUserWithEmailAndPassword(email, password);
         }
       } catch (err) {
-        alert("Erro: " + err.message);
+        alert("⚠️ Erro: " + err.message.replace("Firebase:", "").trim());
       }
     });
 
@@ -123,7 +101,7 @@
       if (user) {
         console.log("Usuário logado:", user.email);
         document.getElementById("logoutBtn").style.display = "block";
-        // 🔗 Aqui vai o redirecionamento para sua plataforma
+        // 🔗 Redirecionar após login
         window.location.href = "https://loritosfilmhub.github.io/Ls-Ai-Studio-0.0.2/";
       } else {
         console.log("Usuário deslogado");
@@ -134,9 +112,8 @@
     // Logout
     document.getElementById("logoutBtn").addEventListener("click", async () => {
       await auth.signOut();
-      window.location.href = "/";
+      window.location.href = "index.html"; // volta para a tela de login
     });
   </script>
 </body>
 </html>
-
