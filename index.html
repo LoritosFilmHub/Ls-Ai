@@ -1,74 +1,126 @@
-<!-- Firebase SDK (versão modular) -->
-<script type="module">
-  // Importando do CDN
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-  import { 
-    getAuth, 
-    signInWithEmailAndPassword, 
-    createUserWithEmailAndPassword, 
-    onAuthStateChanged, 
-    signOut 
-  } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login - Ls AI Studio</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: Arial, sans-serif; }
+    body {
+      height: 100vh; display: flex; justify-content: center; align-items: center;
+      background: linear-gradient(180deg, #0d001a, #1a0033, #330066); color: #fff;
+    }
+    .container {
+      background: #1c1c1c; padding: 2rem; border-radius: 12px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6);
+      width: 100%; max-width: 400px; text-align: center;
+    }
+    h2 { margin-bottom: 1.5rem; font-size: 1.5rem; }
+    input {
+      width: 100%; padding: 0.8rem; margin: 0.5rem 0;
+      border: none; border-radius: 8px;
+    }
+    .btn {
+      width: 100%; padding: 0.9rem; border: none; border-radius: 8px;
+      background: #a64dff; color: #fff; font-size: 1rem;
+      cursor: pointer; font-weight: bold; transition: 0.3s;
+    }
+    .btn:hover { background: #8a2be2; }
+    .switch { margin-top: 1rem; font-size: 0.9rem; }
+    .switch a { color: #a64dff; text-decoration: none; font-weight: bold; }
+    #logoutBtn { margin-top: 1rem; background: crimson; display: none; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2 id="formTitle">Entrar</h2>
 
-  // Configuração Firebase
-  const firebaseConfig = {
-    apiKey: "AIzaSyDKPoHfjTHnfwrZmqewtM6lTsDAA9tGIO4",
-    authDomain: "ls-ai-studio-ee7b5.firebaseapp.com",
-    projectId: "ls-ai-studio-ee7b5",
-    storageBucket: "ls-ai-studio-ee7b5.firebasestorage.app",
-    messagingSenderId: "900119249794",
-    appId: "1:900119249794:web:b45ce25dce982e2bacc59b"
-  };
+    <form id="authForm">
+      <input type="email" id="email" placeholder="Email" required autocomplete="off">
+      <input type="password" id="password" placeholder="Senha" required autocomplete="off">
+      <button type="submit" class="btn" id="submitBtn">Entrar</button>
+    </form>
 
-  // Inicializa Firebase
-  const app = initializeApp(firebaseConfig);
-  const auth = getAuth(app);
+    <button id="logoutBtn" class="btn">Sair</button>
 
-  let isLogin = true;
+    <div class="switch">
+      <span id="toggleText">Ainda não tem conta?</span>
+      <a href="#" id="toggleLink">Registrar</a>
+    </div>
+  </div>
 
-  // Envio do formulário
-  document.getElementById("authForm").addEventListener("submit", async (e) => {
-    e.preventDefault();
-    const email = document.getElementById("email").value.trim();
-    const password = document.getElementById("password").value.trim();
+  <!-- Firebase Modular -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { 
+      getAuth, 
+      signInWithEmailAndPassword, 
+      createUserWithEmailAndPassword, 
+      onAuthStateChanged, 
+      signOut 
+    } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
-    try {
-      if (isLogin) {
-        await signInWithEmailAndPassword(auth, email, password);
-      } else {
-        await createUserWithEmailAndPassword(auth, email, password);
+    // Configuração Firebase
+    const firebaseConfig = {
+      apiKey: "AIzaSyDKPoHfjTHnfwrZmqewtM6lTsDAA9tGIO4",
+      authDomain: "ls-ai-studio-ee7b5.firebaseapp.com",
+      projectId: "ls-ai-studio-ee7b5",
+      storageBucket: "ls-ai-studio-ee7b5.firebasestorage.app",
+      messagingSenderId: "900119249794",
+      appId: "1:900119249794:web:b45ce25dce982e2bacc59b"
+    };
+
+    // Inicializa Firebase
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    let isLogin = true;
+
+    // Envio do formulário
+    document.getElementById("authForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value.trim();
+
+      try {
+        if (isLogin) {
+          await signInWithEmailAndPassword(auth, email, password);
+        } else {
+          await createUserWithEmailAndPassword(auth, email, password);
+        }
+      } catch (err) {
+        alert("⚠️ Erro: " + err.message.replace("Firebase:", "").trim());
       }
-    } catch (err) {
-      alert("⚠️ Erro: " + err.message.replace("Firebase:", "").trim());
-    }
-  });
+    });
 
-  // Alternar entre login e registro
-  document.getElementById("toggleLink").addEventListener("click", (e) => {
-    e.preventDefault();
-    isLogin = !isLogin;
-    document.getElementById("formTitle").innerText = isLogin ? "Entrar" : "Registrar";
-    document.getElementById("submitBtn").innerText = isLogin ? "Entrar" : "Registrar";
-    document.getElementById("toggleText").innerText = isLogin ? "Ainda não tem conta?" : "Já tem conta?";
-    document.getElementById("toggleLink").innerText = isLogin ? "Registrar" : "Entrar";
-  });
+    // Alternar entre login e registro
+    document.getElementById("toggleLink").addEventListener("click", (e) => {
+      e.preventDefault();
+      isLogin = !isLogin;
+      document.getElementById("formTitle").innerText = isLogin ? "Entrar" : "Registrar";
+      document.getElementById("submitBtn").innerText = isLogin ? "Entrar" : "Registrar";
+      document.getElementById("toggleText").innerText = isLogin ? "Ainda não tem conta?" : "Já tem conta?";
+      document.getElementById("toggleLink").innerText = isLogin ? "Registrar" : "Entrar";
+    });
 
-  // Monitorar login
-  onAuthStateChanged(auth, (user) => {
-    if (user) {
-      console.log("Usuário logado:", user.email);
-      document.getElementById("logoutBtn").style.display = "block";
-      // 🔗 Redirecionar após login
-      window.location.href = "https://SEU_USUARIO.github.io/Ls-Ai-Studio/"; 
-    } else {
-      console.log("Usuário deslogado");
-      document.getElementById("logoutBtn").style.display = "none";
-    }
-  });
+    // Monitorar login
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        console.log("Usuário logado:", user.email);
+        document.getElementById("logoutBtn").style.display = "block";
+        // 🔗 Redirecionar após login
+        window.location.href = "https://SEU_USUARIO.github.io/Ls-Ai-Studio/"; 
+      } else {
+        console.log("Usuário deslogado");
+        document.getElementById("logoutBtn").style.display = "none";
+      }
+    });
 
-  // Logout
-  document.getElementById("logoutBtn").addEventListener("click", async () => {
-    await signOut(auth);
-    window.location.href = "index.html"; // volta para a tela de login
-  });
-</script>
+    // Logout
+    document.getElementById("logoutBtn").addEventListener("click", async () => {
+      await signOut(auth);
+      window.location.href = "index.html"; // volta para a tela de login
+    });
+  </script>
+</body>
+</html>
