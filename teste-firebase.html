@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Teste Firebase Auth</title>
+  <style>
+    body { font-family: Arial, sans-serif; background: #121212; color: white; text-align: center; padding: 20px; }
+    #debug { background: #000; color: lime; padding: 15px; border-radius: 8px; margin-top: 20px; font-family: monospace; text-align: left; max-height: 300px; overflow-y: auto; }
+    button { background: #ff3366; color: white; padding: 12px 20px; border: none; border-radius: 10px; cursor: pointer; margin: 20px 0; font-size: 16px; }
+    button:hover { background: #cc0033; }
+  </style>
+</head>
+<body>
+
+  <h2>🚀 Teste de Autenticação Firebase</h2>
+  <button onclick="testarFirebase()">💥 Criar Usuário de Teste</button>
+  <div id="debug">Aguardando ação...</div>
+
+  <script type="module">
+    // ✅ IMPORTS — TUDO QUE VOCÊ PRECISA
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+    // ✅ SUA CONFIGURAÇÃO — JÁ ESTÁ HABILITADA NO CONSOLE? SIM! 👍
+    const firebaseConfig = {
+      apiKey: "AIzaSyCLWvDtXZuGwhME9FxvXFcs9Ir2YkNVRBg",
+      authDomain: "ls-ai-studio-64ecf.firebaseapp.com",
+      projectId: "ls-ai-studio-64ecf",
+      storageBucket: "ls-ai-studio-64ecf.firebasestorage.app",
+      messagingSenderId: "196639465971",
+      appId: "1:196639465971:web:0da4a1df0ba251db807286",
+      measurementId: "G-VSLCSZ0Y5Q"
+    };
+
+    // ✅ INICIALIZAÇÃO — NÃO MEXA AQUI
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app); // 👈 Isso é OBRIGATÓRIO
+
+    // ✅ FUNÇÃO DE TESTE — COLE TUDO ISSO
+    async function testarFirebase() {
+      const debug = document.getElementById("debug");
+      debug.innerHTML = "🔧 Iniciando teste...<br>";
+
+      try {
+        const timestamp = Date.now();
+        const email = `teste+${timestamp}@lsstudio.temp`;
+        const senha = `SenhaFort3!${timestamp}`;
+
+        debug.innerHTML += `📧 Email: ${email}<br>`;
+        debug.innerHTML += `🔒 Tentando criar usuário...<br>`;
+
+        // 👇 AQUI USAMOS A FUNÇÃO QUE VOCÊ IMPORTOU!
+        const userCredential = await createUserWithEmailAndPassword(auth, email, senha);
+
+        debug.innerHTML += `✅ <strong>SUCESSO!</strong><br>`;
+        debug.innerHTML += `🆔 UID: ${userCredential.user.uid}<br>`;
+        debug.innerHTML += `✉️ Email: ${userCredential.user.email}<br>`;
+        debug.innerHTML += `🎉 <strong>TUDO ESTÁ FUNCIONANDO PERFEITAMENTE.</strong><br>`;
+        debug.innerHTML += `👉 Você pode prosseguir com seu sistema de login normal.<br>`;
+
+        console.log("✅ Usuário criado com sucesso:", userCredential.user);
+
+      } catch (error) {
+        debug.innerHTML += `❌ <strong>FALHOU!</strong><br>`;
+        debug.innerHTML += `📛 Código: <strong>${error.code}</strong><br>`;
+        debug.innerHTML += `💬 Mensagem: ${error.message}<br>`;
+        debug.innerHTML += `🚨 <strong>Copie essa mensagem e me envie se precisar de ajuda.</strong><br>`;
+
+        console.error("🔥 Erro completo:", error);
+      }
+    }
+
+    // ✅ EXPÕE A FUNÇÃO PARA O BOTÃO
+    window.testarFirebase = testarFirebase;
+
+  </script>
+
+</body>
+</html>
