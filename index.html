@@ -13,13 +13,49 @@
       padding: 40px;
     }
 
-    .pix-container {
+    .container {
       max-width: 450px;
       margin: auto;
       background: rgba(255, 255, 255, 0.1);
       padding: 25px;
       border-radius: 15px;
       box-shadow: 0 0 20px rgba(0,0,0,0.4);
+    }
+
+    input[type="email"], input[type="password"] {
+      width: 100%;
+      padding: 12px;
+      margin: 8px 0;
+      border-radius: 8px;
+      border: none;
+      outline: none;
+    }
+
+    button {
+      background: #7b2ff7;
+      color: white;
+      font-size: 16px;
+      padding: 12px 20px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      margin: 8px 0;
+    }
+
+    button:hover {
+      background: #5b00b5;
+    }
+
+    .auth-btn {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin: 10px 0;
+    }
+
+    .auth-btn button {
+      flex: 1;
+      background: #333;
     }
 
     .pix-container img {
@@ -83,43 +119,44 @@
   </style>
 </head>
 <body>
-  <div class="pix-container">
+  <div class="container" id="login-box">
+    <h2>Entrar</h2>
+    <div class="auth-btn">
+      <button onclick="loginGoogle()">Google</button>
+      <button onclick="loginApple()">Maçã</button>
+    </div>
+    <p>ou continue com e-mail</p>
+    <input type="email" id="email" placeholder="Email">
+    <input type="password" id="senha" placeholder="Senha">
+    <button onclick="loginEmail()">Entrar</button>
+    <p><a href="#" style="color:#fff;" onclick="registrarEmail()">Ainda não está registrado? Inscrição</a></p>
+    <p><a href="#" style="color:#fff;" onclick="resetSenha()">Esqueceu a senha?</a></p>
+  </div>
+
+  <div class="container pix-container" id="pix-box" style="display:none;">
     <h2>Pagamento via Pix</h2>
     <p>Escolha um valor para gerar o QR Code:</p>
-
-    <!-- Botões de valores -->
     <div class="valores">
       <button class="valor-btn" onclick="gerarPix(10)">R$ 10</button>
       <button class="valor-btn" onclick="gerarPix(20)">R$ 20</button>
       <button class="valor-btn" onclick="gerarPix(30)">R$ 30</button>
     </div>
-
-    <!-- QR Code -->
     <img id="qrcode" src="assets/qrcode-pix.png" alt="QR Code Pix">
-
-    <!-- Chave Pix -->
     <div class="pix-texto">
       <strong>Chave Pix:</strong><br>
       <span id="pix-chave">1c814ae7-453e-470d-a9b4-9b26f1589d1a</span><br><br>
       <strong>E-mail:</strong><br>
       <span>loritos.videoshort.ai@gmail.com</span>
     </div>
-
-    <!-- Botão copiar -->
     <button class="valor-btn" onclick="copiarPix()">📋 Copiar Chave Pix</button>
-
     <p class="rodape">LS Ai Studio © 2025</p>
-
-    <!-- Debug Firebase -->
     <div id="debug" class="debug"></div>
   </div>
 
-  <!-- Firebase -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
-    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
+    import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, sendPasswordResetEmail, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
 
-    // Configuração Firebase corrigida
     const firebaseConfig = {
       apiKey: "AIzaSyDKPoHfjTHnfwrZmqewtM6lTsDAA9tGIO4",
       authDomain: "ls-ai-studio-ee7b5.firebaseapp.com",
@@ -131,32 +168,64 @@
 
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
-
-    // Debug
     const logBox = document.getElementById("debug");
+
     function log(msg) {
       const time = new Date().toLocaleTimeString();
       logBox.innerHTML += `[${time}] ${msg}<br>`;
       logBox.scrollTop = logBox.scrollHeight;
     }
 
-    log("Firebase inicializado. Aguardando autenticação...");
-
     onAuthStateChanged(auth, (user) => {
       if (user) {
         log("Usuário logado: " + user.email);
+        document.getElementById("login-box").style.display = "none";
+        document.getElementById("pix-box").style.display = "block";
       } else {
         log("Usuário deslogado.");
+        document.getElementById("login-box").style.display = "block";
+        document.getElementById("pix-box").style.display = "none";
       }
     });
 
-    // Funções Pix
+    function loginEmail() {
+      const email = document.getElementById("email").value;
+      const senha = document.getElementById("senha").value;
+      signInWithEmailAndPassword(auth, email, senha)
+        .then((userCredential) => log("Login com email realizado: " + email))
+        .catch((error) => log("Erro login email: " + error.message));
+    }
+
+    function registrarEmail() {
+      const email = document.getElementById("email").value;
+      const senha = document.getElementById("senha").value;
+      createUserWithEmailAndPassword(auth, email, senha)
+        .then((userCredential) => log("Conta criada: " + email))
+        .catch((error) => log("Erro criar conta: " + error.message));
+    }
+
+    function resetSenha() {
+      const email = document.getElementById("email").value;
+      sendPasswordResetEmail(auth, email)
+        .then(() => log("Email de redefinição enviado para: " + email))
+        .catch((error) => log("Erro reset senha: " + error.message));
+    }
+
+    function loginGoogle() {
+      const provider = new GoogleAuthProvider();
+      signInWithPopup(auth, provider)
+        .then((result) => log("Login Google realizado: " + result.user.email))
+        .catch((error) => log("Erro Google: " + error.message));
+    }
+
+    function loginApple() {
+      alert("Login Apple não implementado nesse exemplo.");
+    }
+
     function gerarPix(valor) {
       alert("🔗 Você escolheu pagar R$ " + valor + ". O QR Code será usado para esse valor.");
       log("QR Code gerado para R$ " + valor);
     }
-
-    window.gerarPix = gerarPix;
 
     function copiarPix() {
       const chave = document.getElementById("pix-chave").innerText;
@@ -166,6 +235,7 @@
       });
     }
 
+    window.gerarPix = gerarPix;
     window.copiarPix = copiarPix;
   </script>
 </body>
