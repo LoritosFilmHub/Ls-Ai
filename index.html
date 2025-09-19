@@ -119,11 +119,13 @@
   </style>
 </head>
 <body>
+
+  <!-- Caixa de Login -->
   <div class="container" id="login-box">
     <h2>Entrar</h2>
     <div class="auth-btn">
       <button onclick="loginGoogle()">Google</button>
-      <button onclick="loginApple()">Maçã</button>
+      <button onclick="loginApple()">Apple</button>
     </div>
     <p>ou continue com e-mail</p>
     <input type="email" id="email" placeholder="Email">
@@ -133,6 +135,7 @@
     <p><a href="#" style="color:#fff;" onclick="resetSenha()">Esqueceu a senha?</a></p>
   </div>
 
+  <!-- Caixa de Pix (Iniciada oculta) -->
   <div class="container pix-container" id="pix-box" style="display:none;">
     <h2>Pagamento via Pix</h2>
     <p>Escolha um valor para gerar o QR Code:</p>
@@ -141,7 +144,7 @@
       <button class="valor-btn" onclick="gerarPix(20)">R$ 20</button>
       <button class="valor-btn" onclick="gerarPix(30)">R$ 30</button>
     </div>
-    <img id="qrcode" src="assets/qrcode-pix.png" alt="QR Code Pix">
+    <img id="qrcode" src="https://via.placeholder.com/250x250?text=QR+Code" alt="QR Code Pix">
     <div class="pix-texto">
       <strong>Chave Pix:</strong><br>
       <span id="pix-chave">1c814ae7-453e-470d-a9b4-9b26f1589d1a</span><br><br>
@@ -161,13 +164,14 @@
       apiKey: "AIzaSyDKPoHfjTHnfwrZmqewtM6lTsDAA9tGIO4",
       authDomain: "ls-ai-studio-ee7b5.firebaseapp.com",
       projectId: "ls-ai-studio-ee7b5",
-      storageBucket: "ls-ai-studio-ee7b5.appspot.com",
+      storageBucket: "ls-ai-studio-ee7b5.firebasestorage.app", // Corrigido
       messagingSenderId: "900119249794",
       appId: "1:900119249794:web:b45ce25dce982e2bacc59b"
     };
 
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
+
     const logBox = document.getElementById("debug");
 
     function log(msg) {
@@ -176,9 +180,10 @@
       logBox.scrollTop = logBox.scrollHeight;
     }
 
+    // Monitora estado do usuário
     onAuthStateChanged(auth, (user) => {
       if (user) {
-        log("Usuário logado: " + user.email);
+        log(`Usuário logado: ${user.email}`);
         document.getElementById("login-box").style.display = "none";
         document.getElementById("pix-box").style.display = "block";
       } else {
@@ -188,55 +193,86 @@
       }
     });
 
+    // Login com Email/Senha
     function loginEmail() {
       const email = document.getElementById("email").value;
       const senha = document.getElementById("senha").value;
       signInWithEmailAndPassword(auth, email, senha)
-        .then((userCredential) => log("Login com email realizado: " + email))
-        .catch((error) => log("Erro login email: " + error.message));
+        .then((userCredential) => {
+          log(`Login com e-mail realizado: ${email}`);
+        })
+        .catch((error) => {
+          log(`Erro no login: ${error.message}`);
+        });
     }
 
+    // Registrar novo usuário
     function registrarEmail() {
       const email = document.getElementById("email").value;
       const senha = document.getElementById("senha").value;
       createUserWithEmailAndPassword(auth, email, senha)
-        .then((userCredential) => log("Conta criada: " + email))
-        .catch((error) => log("Erro criar conta: " + error.message));
+        .then((userCredential) => {
+          log(`Conta criada: ${email}`);
+        })
+        .catch((error) => {
+          log(`Erro ao criar conta: ${error.message}`);
+        });
     }
 
+    // Redefinir senha
     function resetSenha() {
       const email = document.getElementById("email").value;
       sendPasswordResetEmail(auth, email)
-        .then(() => log("Email de redefinição enviado para: " + email))
-        .catch((error) => log("Erro reset senha: " + error.message));
+        .then(() => {
+          log(`Email de redefinição enviado para: ${email}`);
+        })
+        .catch((error) => {
+          log(`Erro ao enviar reset de senha: ${error.message}`);
+        });
     }
 
+    // Login com Google
     function loginGoogle() {
       const provider = new GoogleAuthProvider();
       signInWithPopup(auth, provider)
-        .then((result) => log("Login Google realizado: " + result.user.email))
-        .catch((error) => log("Erro Google: " + error.message));
+        .then((result) => {
+          log(`Login Google realizado: ${result.user.email}`);
+        })
+        .catch((error) => {
+          log(`Erro no login com Google: ${error.message}`);
+        });
     }
 
+    // Login com Apple (simulado)
     function loginApple() {
-      alert("Login Apple não implementado nesse exemplo.");
+      alert("Login com Apple ainda não implementado. Simulação apenas.");
+      log("Tentativa de login com Apple");
     }
 
+    // Gerar Pix com valor
     function gerarPix(valor) {
-      alert("🔗 Você escolheu pagar R$ " + valor + ". O QR Code será usado para esse valor.");
-      log("QR Code gerado para R$ " + valor);
+      const qrcode = document.getElementById("qrcode");
+      const valueText = document.querySelector("#qrcode + .pix-texto > span:nth-child(2)");
+      qrcode.src = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent('https://example.com/pix?amount=' + valor)}`;
+      valueText.textContent = `R$ ${valor},00`;
+      log(`QR Code gerado para R$${valor}`);
     }
 
+    // Copiar chave Pix
     function copiarPix() {
       const chave = document.getElementById("pix-chave").innerText;
       navigator.clipboard.writeText(chave).then(() => {
         alert("✅ Chave Pix copiada com sucesso!");
         log("Chave Pix copiada.");
+      }).catch(err => {
+        log("Erro ao copiar chave: " + err);
       });
     }
 
+    // Expor funções globalmente
     window.gerarPix = gerarPix;
     window.copiarPix = copiarPix;
   </script>
+
 </body>
 </html>
