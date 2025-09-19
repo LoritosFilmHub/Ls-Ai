@@ -54,16 +54,17 @@
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
 
   <script>
-    // 🔑 Configuração do Firebase
+    // 🔑 Configuração do Firebase (depois vamos ajustar com dados reais do Console)
     const firebaseConfig = {
-      apiKey: "SUA_API_KEY",
-      authDomain: "SEU_PROJETO.firebaseapp.com",
-      projectId: "SEU_PROJETO",
-      storageBucket: "SEU_PROJETO.appspot.com",
-      messagingSenderId: "123456789",
-      appId: "1:123456789:web:abcdefg12345"
+      apiKey: "AIzaSyCUAFWM3H_wQkTUQ6Qk1vKXw5TpCfp4mmI",
+      authDomain: "ls-ai-studio.firebaseapp.com",       // 🔄 trocar depois pelo real
+      projectId: "ls-ai-studio",                        // 🔄 trocar depois pelo real
+      storageBucket: "ls-ai-studio.appspot.com",        // 🔄 trocar depois pelo real
+      messagingSenderId: "123456789000",                // 🔄 trocar depois pelo real
+      appId: "1:123456789000:web:abcdef1234567890"      // 🔄 trocar depois pelo real
     };
 
+    // Inicializa Firebase
     firebase.initializeApp(firebaseConfig);
     const auth = firebase.auth();
 
@@ -102,7 +103,7 @@
         console.log("Usuário logado:", user.email);
         document.getElementById("logoutBtn").style.display = "block";
         // 🔗 Redirecionar após login
-        window.location.href = "https://loritosfilmhub.github.io/Ls-Ai-Studio-0.0.2/";
+        window.location.href = "https://SEU_USUARIO.github.io/Ls-Ai-Studio/"; 
       } else {
         console.log("Usuário deslogado");
         document.getElementById("logoutBtn").style.display = "none";
