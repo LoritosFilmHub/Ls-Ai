@@ -1,0 +1,27 @@
+
+import React from 'react';
+import { Button } from '@/components/ui/button';
+import { 
+    Paintbrush, Camera, Tv, Box, Droplets, Grid, Feather, Landmark, Zap, Cookie, Sticker, BookOpen,
+    TreePine, Users, Gamepad2, Hexagon, User, Palette, Flower, Rocket, Type, Triangle, 
+    Shirt, Home, Coffee, Smile, Building, FileImage, Mountain,
+    ToyBrick, Bird, Atom, Ghost, Sprout, Clapperboard, Wand2, Dna, Bot, Fingerprint, Car
+} from 'lucide-react';
+
+const styles = [
+    // Estilos Clássicos
+    { name: 'Fotográfico', value: 'photographic style, hyperrealistic, 8k', icon: Camera },
+    { name: 'Arte Digital', value: 'digital painting, concept art, smooth, sharp focus', icon: Paintbrush },
+    { name: 'Cyberpunk', value: 'cyberpunk style, neon lights, futuristic city, dystopian', icon: Zap },
+    { name: 'Anime', value: 'anime style, manga style, detailed, vibrant colors', icon: Tv },
+    
+    // Novos Estilos Adicionados
+    { name: 'Estilo Lego', value: 'lego bricks style, blocky, plastic toy look', icon: ToyBrick },
+    { name: 'Estilo Moebius', value: 'style by Moebius (Jean Giraud), intricate line work, surreal sci-fi landscapes, Ligne claire', icon: Feather },
+    { name: 'Estilo Origami', value: 'origami style, folded paper art, geometric, clean folds', icon: Bird },
+    { name: 'Estilo Mandala', value: 'mandala art, intricate symmetrical patterns, spiritual, geometric design', icon: Atom },
+    { name: 'Estilo Scooby-Doo', value: 'Hanna-Barbera cartoon style, Scooby-Doo animation, 1960s retro cartoon', icon: Ghost },
+    { name: 'Estilo Mário e Luigi', value: 'Super Mario Bros style, Nintendo art, colorful, plumber characters', icon: Sprout },
+    { name: 'Estilo Storyboard', value: 'storyboard sketch style, black and white, rough lines, cinematic framing', icon: Clapperboard },
+    { name: 'Estilo ImageFX', value: 'ImageFX style, high quality photorealistic, detailed, crisp focus', icon: Wand2 },
+ 
