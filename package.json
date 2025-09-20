@@ -10,3 +10,27 @@
   },
   ...
 }
+{
+  "name": "meu-projeto",
+  "version": "1.0.0",
+  "private": true,
+  "homepage": "https://SEU_USUARIO.github.io/NOME_DO_REPOSITORIO",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "deploy": "gh-pages -d dist"
+  },
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "lucide-react": "^0.275.0",
+    "framer-motion": "^10.12.16",
+    "date-fns": "^2.31.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.0.0",
+    "vite": "^4.4.0",
+    "gh-pages": "^5.0.0"
+  }
+}
